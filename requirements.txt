@@ -1,0 +1,62 @@
+# FastAPI
+fastapi
+uvicorn[standard]
+
+# PDF Processing
+pymupdf
+pdf2docx
+python-docx
+
+# OCR
+pytesseract
+paddleocr
+paddlepaddle
+
+# Image Processing
+pillow
+opencv-python
+
+# LangGraph
+langgraph
+langchain
+langchain-core
+langchain-community
+
+# RAG
+sentence-transformers
+faiss-cpu
+chromadb
+
+# Database
+sqlalchemy
+psycopg2-binary
+alembic
+
+# Storage / API
+requests
+python-multipart
+
+# Data Handling
+pandas
+numpy
+
+# Validation
+pydantic
+
+# Environment Variables
+python-dotenv
+
+# Logging
+loguru
+
+# Testing
+pytest
+
+# Optional Redis Cache
+redis
+
+# Kubernetes Client
+kubernetes
+
+# MinIO Object Storage
+minio

@@ -1,0 +1,23 @@
+from fastapi import FastAPI
+
+from pdf_processor import PDFProcessor
+
+app = FastAPI()
+
+processor = PDFProcessor()
+
+
+@app.get("/health")
+def health():
+
+    return {
+        "status": "running"
+    }
+
+
+@app.post("/process")
+def process(pdf_path: str):
+
+    return processor.process_pdf(
+        pdf_path
+    )
