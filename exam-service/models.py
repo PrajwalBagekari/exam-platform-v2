@@ -2,8 +2,8 @@ from sqlalchemy import (
     Column,
     Integer,
     String,
-    ForeignKey,
-    Text
+    Text,
+    ForeignKey
 )
 
 from database import Base
@@ -39,24 +39,15 @@ class Section(Base):
 
     exam_id = Column(
         Integer,
-        ForeignKey(
-            "exams.id"
-        )
+        ForeignKey("exams.id")
     )
 
-    name = Column(
-        String
-    )
+    name = Column(String)
 
-    total_questions = Column(
-        Integer
-    )
+    total_questions = Column(Integer)
 
-    timer_minutes = Column(
-        Integer
-    )
+    timer_minutes = Column(Integer)
 
-    
 class Question(Base):
 
     __tablename__ = "questions"
@@ -68,31 +59,28 @@ class Question(Base):
 
     section_id = Column(
         Integer,
-        ForeignKey(
-            "sections.id"
-        )
+        ForeignKey("sections.id")
     )
 
-    question_text = Column(
-        Text
+    question_text = Column(Text)
+
+    directions = Column(
+        Text,
+        nullable=True
     )
 
-    option_a = Column(String)
-
-    option_b = Column(String)
-
-    option_c = Column(String)
-
-    option_d = Column(String)
-
-    option_e = Column(String)
-
-    correct_answer = Column(
+    shared_image_path = Column(
         String,
         nullable=True
     )
 
-    image_path = Column(
-        String,
-        nullable=True
-    )
+    option_a = Column(Text)
+    option_b = Column(Text)
+    option_c = Column(Text)
+    option_d = Column(Text)
+    option_e = Column(Text)
+
+
+    correct_answer = Column(String)
+
+    image_path = Column(String)

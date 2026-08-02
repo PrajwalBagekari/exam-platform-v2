@@ -8,11 +8,17 @@ import QuestionPalette from "../components/QuestionPalette";
 type Question = {
   id: number;
   question: string;
+
+  description?: string;
+
+  image_path?: string;
+
   option_a: string;
   option_b: string;
   option_c: string;
   option_d: string;
   option_e?: string;
+
   correct_answer?: string;
 };
 export default function TakeExam() {
@@ -28,8 +34,18 @@ export default function TakeExam() {
   const [loading, setLoading] =
     useState(true);
 
-  const [currentQuestion, setCurrentQuestion] =
+  const [currentQuestion, _setCurrentQuestion] =
     useState(1);
+
+  const setCurrentQuestion = (value: number) => {
+
+    console.log(
+      "SET CURRENT QUESTION CALLED:",
+      value
+    );
+
+  _setCurrentQuestion(value);
+};
 
   const [timeLeft, setTimeLeft] =
     useState(60 * 60);
@@ -147,29 +163,74 @@ export default function TakeExam() {
 
   const loadQuestions = async () => {
 
-    try {
+      try {
 
-      const response =
-        await axios.get(
-          `http://localhost:8006/exam/${id}/questions`
+        const response =
+          await axios.get(
+            `http://localhost:8006/exam/${id}/questions`
+          );
+
+        console.log(
+          "FIRST 20 QUESTIONS",
+          response.data.questions
+            .slice(0, 20)
+            .map((q: any) =>
+              q.question.substring(0, 30)
+            )
         );
 
-      setQuestions(
-        response.data.questions || []
-      );
+        const sortedQuestions =
+          [...(response.data.questions || [])].sort(
+            (a: any, b: any) => {
 
-        } catch (error) {
+              const qa = Number(
+                a.question.match(/^Q(\d+)/)?.[1] || 0
+              );
+
+              const qb = Number(
+                b.question.match(/^Q(\d+)/)?.[1] || 0
+              );
+
+              return qa - qb;
+            }
+          );
+
+        console.log(
+          "SORTED QUESTION NUMBERS",
+          sortedQuestions.map((q: any) =>
+            q.question.match(/^Q(\d+)/)?.[1]
+          )
+        );
+
+        setQuestions(
+                  sortedQuestions
+                );
+                console.log(
+          "FIRST QUESTION:",
+          sortedQuestions[0]?.question
+        );
+
+        console.log(
+          "SECOND QUESTION:",
+          sortedQuestions[1]?.question
+        );
+
+        console.log(
+          "THIRD QUESTION:",
+          sortedQuestions[2]?.question
+        );
+
+      } catch (error) {
 
         console.error(error);
 
-        } finally {
+      } finally {
 
         setLoading(false);
 
-        }
+      }
 
     };
-
     loadQuestions();
     
     const timer = setInterval(() => {
@@ -217,11 +278,29 @@ export default function TakeExam() {
     ]);
     
 
-
+  
   
 
   const currentData =
     questions[currentQuestion - 1];
+    console.log(
+      "CURRENT QUESTION INDEX:",
+      currentQuestion - 1
+    );
+
+  console.log(
+    "CURRENT QUESTION TEXT:",
+    currentData?.question
+  );
+  console.log(
+    "CURRENT DESCRIPTION:",
+    currentData?.description
+  );
+
+  console.log(
+    "CURRENT IMAGE:",
+    currentData?.image_path
+  );
 
   const selectedAnswer =
     answers[currentQuestion];
@@ -305,6 +384,13 @@ export default function TakeExam() {
   }
 
   if (!questions.length) {
+    console.log(
+      "FIRST 10 QUESTIONS",
+      questions.slice(0, 10).map(
+        q => q.question
+      )
+    );
+    
     return (
       <h1>
         No Questions Found
@@ -371,11 +457,37 @@ export default function TakeExam() {
 
           <p>
             <strong>
-              {
-                currentData.question
-              }
+              {currentData.question}
             </strong>
           </p>
+
+          {currentData.description && (
+            <div
+              style={{
+                marginTop: "10px",
+                whiteSpace: "pre-wrap",
+                padding: "10px",
+                background: "#f5f5f5",
+                borderRadius: "6px",
+              }}
+            >
+              {currentData.description}
+            </div>
+          )}
+
+          {currentData.image_path && (
+            <div style={{ marginTop: "15px" }}>
+              <img
+                src={currentData.image_path}
+                alt="Question"
+                style={{
+                  maxWidth: "100%",
+                  border: "1px solid #ccc",
+                  borderRadius: "6px",
+                }}
+              />
+            </div>
+          )}
 
           <div>
             <input
@@ -582,14 +694,19 @@ export default function TakeExam() {
                 calculateScore();
 
             navigate(
-                "/result",
-                {
-                state: {
-                    score,
-                    totalQuestions,
-                },
-                }
-            );
+  "/result",
+  {
+    state: {
+      score,
+      totalQuestions,
+      attempted,
+      skipped,
+      review,
+      notVisited,
+      timeLeft,
+    },
+  }
+);
 
             }}
         />
