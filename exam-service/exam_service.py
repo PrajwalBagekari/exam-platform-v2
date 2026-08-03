@@ -63,11 +63,11 @@ class ExamService:
                         ""
                     ),
                         directions=q.get(
-                        "directions"
+                        "description"
                     ),
 
                     shared_image_path=q.get(
-                        "shared_image_path"
+                        "image_path",
                     ),
 
                     option_a=(

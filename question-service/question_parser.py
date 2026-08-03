@@ -1,12 +1,72 @@
 import re
 from collections import Counter
+from fastapi import FastAPI
+
 
 DIRECTION_PATTERN = re.compile(
-    r"Directions\s*\((\d+)-(\d+)\)\s*:(.*?)(?=Q\d+\.)",
+    r"Directions\s*\((\d+)-(\d+)\)\s*:(.*?)(?=Q\d+\.|$)",
     re.IGNORECASE | re.DOTALL
 )
+def looks_like_code(text):
+    code_keywords = [
+        "#include",
+        "int main",
+        "printf",
+        "cout",
+        "cin",
+        "System.out",
+        "public static",
+        "def ",
+        "print(",
+        "for(",
+        "while(",
+        "{",
+        "}",
+        ";"
+    ]
 
-def extract_questions(text: str):
+    return any(
+        keyword in text
+        for keyword in code_keywords
+    )
+def clean_option(option_text):
+
+    option_text = re.sub(
+        r"\[\[IMAGE:.*?\]\]",
+        "",
+        option_text
+    )
+
+    if looks_like_code(option_text):
+        return option_text.strip()
+
+
+    lines = [
+        line.strip()
+        for line in option_text.splitlines()
+        if line.strip()
+    ]
+
+    if len(lines) == 2:
+        return f"{lines[0]}/{lines[1]}"
+
+    return " ".join(lines)
+
+def extract_questions(
+    text: str,
+    images=None
+):
+    
+
+    if images is None:
+        images = []
+
+    print("\nIMAGES PASSED TO PARSER:")
+    print(images)
+
+    print("IMAGE COUNT:")
+    print(len(images))
+
 
     questions = []
 
@@ -54,8 +114,8 @@ def extract_questions(text: str):
                 directions_text.strip(),
 
                 "shared_image_path":
-                image_path if (image_path := re.search(
-                    r"image_[A-Za-z0-9+/=]+",
+                image_path.group(0) if (image_path := re.search(
+                    r"image_[^\]\s]+",
                     directions_text
                 )) else None,
 
@@ -97,26 +157,18 @@ def extract_questions(text: str):
         len(blocks)
     )
 
-    image_matches = re.findall(
-        r"image_[A-Za-z0-9+/=]+",
-        text
-    )
+    
 
     print(
         "\nIMAGES REFERENCED:"
     )
 
-    print(
-        image_matches
-    )
 
     print(
         "\nIMAGE COUNTS:"
     )
 
-    print(
-        Counter(image_matches)
-    )
+
 
     
     print("\nDIRECTION GROUPS FOUND:")
@@ -132,14 +184,13 @@ def extract_questions(text: str):
     for block in blocks:
 
         question_match = re.search(
-            r"^(Q\d+\..*?)(?=\([a]\)|$)",
+            r"^(Q\d+\..*?)(?=\(a\)|$)",
             block,
-            flags=re.DOTALL
+            flags=re.DOTALL | re.IGNORECASE
         )
 
         option_matches = re.findall(
-            r"\(([a-e])\)\s*(.*?)"
-            r"(?=\([a-e]\)\s|Directions\s*\(\d+\-\d+\)|$)",
+            r"\(([a-e])\)\s*(.*?)(?=\([a-e]\)|Ans\.|Answer|$)",
             block,
             flags=re.DOTALL | re.IGNORECASE
         )
@@ -154,7 +205,7 @@ def extract_questions(text: str):
         print(option_matches[:5])
 
         answer_match = re.search(
-            r"Ans<strong data-lexical-text=\"true\">\.\(</strong>([a-e])<strong data-lexical-text=\"true\">\)</strong>",
+            r"(?:Ans|Answer)\s*\.?\s*:?\s*\(([a-e])\)",
             block,
             flags=re.IGNORECASE
         )
@@ -169,23 +220,31 @@ def extract_questions(text: str):
                 .strip()
             )
 
+            if not looks_like_code(question_text):
+                question_text = re.sub(
+                    r"\[\[IMAGE:.*?\]\]",
+                    "",
+                    question_text
+                ).strip()
+        is_code = looks_like_code(question_text)
         options = []
 
         for _, option_text in option_matches:
 
             options.append(
-                option_text.strip()
+                clean_option(option_text)
             )
 
-        correct_answer = None
+        answer_match = re.search(
+            r"(?:Ans|Answer)\s*\.?\s*:?\s*\(([a-e])\)",
+            block,
+            flags=re.IGNORECASE
+        )
+
+        answer = None
 
         if answer_match:
-
-            correct_answer = (
-                answer_match
-                .group(1)
-                .lower()
-            )
+            answer = answer_match.group(1).lower()
 
         question_number = None
 
@@ -193,26 +252,62 @@ def extract_questions(text: str):
                 r"Q(\d+)\.",
                 question_text
             )
-
-        if question_number_match:
-
-            question_number = int(
-                question_number_match.group(1)
-            )
-
-        
-
-        if question_number_match:
-
-            question_number = int(
-                question_number_match.group(1)
-            )
-
-       # directions = None
+        directions = None
 
         shared_image_path = None
 
+        image_match = re.search(
+            r"\[\[IMAGE:(.*?)\]\]",
+            block
+        )
+        block = re.sub(
+            r"\[\[IMAGE:.*?\]\]",
+            "",
+            block
+        )
+
+        if image_match:
+
+            image_file = image_match.group(1)
+
+            shared_image_path = next(
+                (
+                    img
+                    for img in images
+                    if img.endswith(image_file)
+                ),
+                None
+            )
+
+            if shared_image_path:
+
+                relative_path = shared_image_path.split(
+                    "uploads\\"
+                )[1]
+
+                relative_path = relative_path.replace(
+                    "\\",
+                    "/"
+                )
+
+                shared_image_path = (
+                    f"http://localhost:8001/images/{relative_path}"
+                )
+                
+
         group_type = None
+        if question_number_match:
+
+            question_number = int(
+                question_number_match.group(1)
+            )
+        print(
+            "AUTO IMAGE:",
+            question_number,
+            shared_image_path
+        )
+       
+
         print("\nDIRECTION GROUPS FOUND:")
 
         for group in direction_groups:
@@ -231,6 +326,11 @@ def extract_questions(text: str):
 
                 shared_image_path = (
                     group["shared_image_path"]
+                )
+                print(
+                    "IMAGE FOUND FOR QUESTION:",
+                    question_number,
+                    shared_image_path
                 )
 
                 group_type = (
@@ -255,13 +355,25 @@ def extract_questions(text: str):
             "DIRECTIONS:",
             directions
         )
-
+        print(
+            "QUESTION:",
+            question_number,
+            "DESCRIPTION:",
+            directions,
+            "IMAGE:",
+            shared_image_path,
+            "TYPE:",
+            group_type
+        )
         questions.append(
             {
                 "section": "General",
 
                 "question":
                 question_text,
+
+                "is_code": 
+                is_code,
 
                 "description":
                 directions,
@@ -273,7 +385,7 @@ def extract_questions(text: str):
                 options,
 
                 "correct_answer":
-                correct_answer,
+                answer,
 
                 "group_type":
                 group_type

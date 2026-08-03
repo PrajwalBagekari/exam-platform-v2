@@ -1,6 +1,7 @@
 from pdf2docx import Converter
 from docx import Document
 import os
+from uuid import uuid4
 
 
 class PDFProcessor:
@@ -9,7 +10,7 @@ class PDFProcessor:
 
         docx_path = pdf_path.replace(
             ".pdf",
-            ".docx"
+            f"_{uuid4().hex}.docx"
         )
 
         cv = Converter(pdf_path)
@@ -46,9 +47,7 @@ class PDFProcessor:
 
             if "image" in rel.target_ref:
 
-                image_data = (
-                    rel.target_part.blob
-                )
+                image_data = rel.target_part.blob
 
                 image_name = (
                     f"image_{len(image_paths)+1}.png"
@@ -72,28 +71,39 @@ class PDFProcessor:
                     image_path
                 )
 
-        text = []
+        print("\nIMAGES FOUND:")
+        print(len(image_paths))
+
+        for img in image_paths:
+            print(img)
+
+        text_lines = []
+
+        image_counter = 0
 
         for para in doc.paragraphs:
 
-            if para.text.strip():
+            para_text = para.text.strip()
 
-                text.append(
-                    para.text
+            if para_text:
+
+                text_lines.append(
+                    para_text
                 )
 
-        print(
-            "\nIMAGES FOUND:"
+            xml = para._element.xml
+
+            if "graphicData" in xml:
+
+                image_counter += 1
+
+                text_lines.append(
+                    f"[[IMAGE:image_{image_counter}.png]]"
+                )
+
+        cleaned_text = "\n".join(
+            text_lines
         )
-
-        print(
-            len(image_paths)
-        )
-
-        for img in image_paths:
-
-            print(img)
-        cleaned_text = "\n".join(text)
 
         noise_patterns = [
             "adda247.com/defence",
@@ -109,13 +119,18 @@ class PDFProcessor:
                 ""
             )
 
+        print("\nTEXT SAMPLE:")
+        print(
+            cleaned_text[:5000]
+        )
+
         return {
 
             "docx":
             docx_path,
 
             "text":
-            "\n".join(text),
+            cleaned_text,
 
             "images":
             image_paths

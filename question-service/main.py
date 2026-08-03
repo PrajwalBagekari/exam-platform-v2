@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from paddle.static import data
 
 from question_parser import (
     extract_questions
@@ -24,18 +25,22 @@ def questions(data: dict):
 
     print("REQUEST DATA:")
     print(data)
-
     text = data.get(
         "text",
         ""
     )
 
-    print("=" * 60)
-    print("TEXT RECEIVED:")
-    print(text[:2000])
+    images = data.get(
+        "images",
+        []
+    )
+
+    print("IMAGES RECEIVED:")
+    print(images)
 
     extracted_questions = extract_questions(
-        text
+        text,
+        images
     )
 
     print("=" * 60)

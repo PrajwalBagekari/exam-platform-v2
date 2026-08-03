@@ -118,11 +118,22 @@ def question_node(state):
 
     print("TEXT LENGTH:")
     print(len(full_text))
+    print("=" * 60)
+    print("PDF DATA KEYS:")
+    print(state["pdf_data"].keys())
+
+    print("IMAGES:")
+    print(state["pdf_data"].get("images"))
+
+    print("IMAGE COUNT:")
+    print(len(state["pdf_data"].get("images", [])))
+    print("=" * 60)
 
     response = requests.post(
         "http://127.0.0.1:8002/questions",
         json={
-            "text": full_text
+            "text": full_text,
+            "images": state["pdf_data"]["images"]
         }
     )
 

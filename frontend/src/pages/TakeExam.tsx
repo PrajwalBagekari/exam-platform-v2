@@ -12,7 +12,7 @@ type Question = {
   description?: string;
 
   image_path?: string;
-
+  shared_image_path?: string;
   option_a: string;
   option_b: string;
   option_c: string;
@@ -299,7 +299,7 @@ export default function TakeExam() {
 
   console.log(
     "CURRENT IMAGE:",
-    currentData?.image_path
+    currentData?.shared_image_path
   );
 
   const selectedAnswer =
@@ -455,11 +455,15 @@ export default function TakeExam() {
             {totalQuestions}
           </h3>
 
-          <p>
-            <strong>
-              {currentData.question}
-            </strong>
-          </p>
+          <div
+              style={{
+                whiteSpace: "pre-wrap"
+              }}
+            >
+              <strong>
+                {currentData.question}
+              </strong>
+            </div>
 
           {currentData.description && (
             <div
@@ -475,10 +479,10 @@ export default function TakeExam() {
             </div>
           )}
 
-          {currentData.image_path && (
+          {currentData.shared_image_path && (
             <div style={{ marginTop: "15px" }}>
               <img
-                src={currentData.image_path}
+                src={currentData.shared_image_path}
                 alt="Question"
                 style={{
                   maxWidth: "100%",
@@ -503,7 +507,6 @@ export default function TakeExam() {
                 })
               }
             />
-            {" "}
             {
               currentData.option_a
             }
@@ -523,7 +526,6 @@ export default function TakeExam() {
                 })
               }
             />
-            {" "}
             {
               currentData.option_b
             }
@@ -543,7 +545,6 @@ export default function TakeExam() {
                 })
               }
             />
-            {" "}
             {
               currentData.option_c
             }
