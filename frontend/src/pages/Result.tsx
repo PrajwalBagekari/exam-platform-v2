@@ -1,15 +1,13 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 
 export default function Result() {
   const location = useLocation();
-  const navigate = useNavigate();
   const {
     score = 0,
     totalQuestions = 0,
     attempted = 0,
     skipped = 0,
-    review = 0,
     notVisited = 0,
     timeLeft = 0,
   } = location.state || {};

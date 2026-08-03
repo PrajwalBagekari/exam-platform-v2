@@ -11,41 +11,38 @@ services:
       - "5432:5432"
 
   exam-service:
-    build: ./exam-service
-
+    image: prajwalbagekari/exam-service:latest
     depends_on:
       - postgres
 
     ports:
       - "8006:8006"
-
   gateway:
-    build: ./gateway-service
+    image: prajwalbagekari/gateway:latest
     ports:
       - "8000:8000"
 
   pdf-service:
-    build: ./pdf-service
+    image: prajwalbagekari/pdf-service:latest
     ports:
       - "8001:8001"
 
   question-service:
-    build: ./question-service
+    image: prajwalbagekari/question-service:latest
     ports:
       - "8002:8002"
-
   rag-service:
-    build: ./rag-service
+    image: prajwalbagekari/rag-service:latest
     ports:
       - "8003:8003"
 
   image-service:
-    build: ./image-service
+    image: prajwalbagekari/image-service:latest
     ports:
       - "8005:8005"
 
   langgraph-service:
-    build: ./langgraph-service
+    image: prajwalbagekari/langgraph-service:latest
 
     depends_on:
       - exam-service
