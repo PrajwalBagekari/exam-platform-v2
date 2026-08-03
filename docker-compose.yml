@@ -6,7 +6,6 @@ services:
       POSTGRES_DB: examdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-
     ports:
       - "5432:5432"
 
@@ -14,7 +13,6 @@ services:
     image: prajwalbagekari/exam-service:latest
     depends_on:
       - postgres
-
     ports:
       - "8006:8006"
   gateway:
@@ -43,13 +41,15 @@ services:
 
   langgraph-service:
     image: prajwalbagekari/langgraph-service:latest
+<<<<<<< HEAD
 
+=======
+>>>>>>> 821edad (Replace localhost references)
     depends_on:
       - exam-service
       - pdf-service
       - question-service
       - rag-service
       - image-service
-
     ports:
       - "8008:8008"

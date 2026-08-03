@@ -26,7 +26,7 @@ export default function ExamSummary() {
 
           const response =
             await axios.get(
-              `http://localhost:8006/exam/${id}/questions`
+              `http://pdf2exam.org:8006/exam/${id}/questions`
             );
 
           setExam({

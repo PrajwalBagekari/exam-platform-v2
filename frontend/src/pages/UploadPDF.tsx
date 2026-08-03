@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function UploadPDF() {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 821edad (Replace localhost references)
   const [uploading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const navigate = useNavigate();
