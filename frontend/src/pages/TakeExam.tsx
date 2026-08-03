@@ -319,31 +319,64 @@ export default function TakeExam() {
       }));
     };
 
-    const saveAndNext = () => {
-      if (answers[currentQuestion]) {
-        setQuestionStatusForCurrent("answered");
-      }
+  const saveAndNext = () => {
+
+    if (answers[currentQuestion]) {
+
+      setQuestionStatusForCurrent(
+        "answered"
+      );
+
+    } else {
+
+      setQuestionStatusForCurrent(
+        "unseen"
+      );
+
+    }
+
+    if (currentQuestion < totalQuestions) {
+
+      setCurrentQuestion(
+        currentQuestion + 1
+      );
+
+    }
+
+  };
+
+ const skipQuestion = () => {
+
+      setQuestionStatusForCurrent(
+        "skipped"
+      );
 
       if (currentQuestion < totalQuestions) {
-        setCurrentQuestion(currentQuestion + 1);
+
+        setCurrentQuestion(
+          currentQuestion + 1
+        );
+
       }
+
     };
+  
 
-    const skipQuestion = () => {
-      setQuestionStatusForCurrent("skipped");
+  const markForReview = () => {
 
-      if (currentQuestion < totalQuestions) {
-        setCurrentQuestion(currentQuestion + 1);
-      }
-    };
+    setQuestionStatusForCurrent(
+      "review"
+    );
 
-    const markForReview = () => {
-      setQuestionStatusForCurrent("review");
+    if (currentQuestion < totalQuestions) {
 
-      if (currentQuestion < totalQuestions) {
-        setCurrentQuestion(currentQuestion + 1);
-      }
-    };
+      setCurrentQuestion(
+        currentQuestion + 1
+      );
+
+    }
+
+  };
 
   const attempted =
     Object.values(
@@ -465,33 +498,34 @@ export default function TakeExam() {
               </strong>
             </div>
 
-          {currentData.description && (
-            <div
-              style={{
-                marginTop: "10px",
-                whiteSpace: "pre-wrap",
-                padding: "10px",
-                background: "#f5f5f5",
-                borderRadius: "6px",
-              }}
-            >
-              {currentData.description}
-            </div>
-          )}
+         {currentData.description && (
+          <div
+            style={{
+              marginTop: "10px",
+              whiteSpace: "pre-wrap",
+              padding: "10px",
+              background: "#f5f5f5",
+              borderRadius: "6px",
+            }}
+          >
+            {currentData.description}
+        </div>
+        )}
 
-          {currentData.shared_image_path && (
-            <div style={{ marginTop: "15px" }}>
-              <img
-                src={currentData.shared_image_path}
-                alt="Question"
-                style={{
-                  maxWidth: "100%",
-                  border: "1px solid #ccc",
-                  borderRadius: "6px",
-                }}
-              />
-            </div>
-          )}
+            {currentData.shared_image_path && (
+              <div style={{ marginTop: "15px" }}>
+                <img
+                  src={currentData.shared_image_path}
+                  alt="Question"
+                  style={{
+                    maxWidth: "100%",
+                    border: "1px solid #ccc",
+                    borderRadius: "6px",
+                  }}
+                />
+              </div>
+      
+        )}
 
           <div>
             <input

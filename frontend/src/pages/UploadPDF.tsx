@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function UploadPDF() {
+  
+  const [uploading, setUploading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
 
   const navigate = useNavigate();
@@ -72,9 +74,20 @@ export default function UploadPDF() {
       <br />
       <br />
 
-      <button onClick={uploadPdf}>
-        Upload PDF
-      </button>
+      <button
+      onClick={uploadPdf}
+      disabled={uploading}
+      style={{
+        opacity: uploading ? 0.6 : 1,
+        cursor: uploading
+          ? "not-allowed"
+          : "pointer",
+      }}
+    >
+      {uploading
+        ? "Uploading..."
+        : "Upload PDF"}
+    </button>
     </div>
   );
 }
