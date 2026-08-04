@@ -1,52 +1,56 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 export default function Result() {
   const location = useLocation();
-  const {
+  const navigate = useNavigate();
+    const {
     score = 0,
     totalQuestions = 0,
     attempted = 0,
     skipped = 0,
+    review = 0,
     notVisited = 0,
     timeLeft = 0,
-  } = location.state || {};
+    } = location.state || {};
 
-  const correct = score;
+    const correct = score;
 
-  const incorrect = Math.max(
-    attempted - correct,
-    0
-  );
+    const incorrect =
+    Math.max(
+        attempted - correct,
+        0
+    );
 
-  const unseen = Math.max(
-    skipped + notVisited,
-    0
-  );
+    const unseen =
+    notVisited;
 
-  const accuracy =
+    const accuracy =
     attempted > 0
-      ? (
-          (correct / attempted) *
-          100
+        ? (
+            (correct /
+            attempted) *
+            100
         ).toFixed(2)
-      : "0.00";
+        : "0.00";
 
-  const totalTime = 60;
+    const totalTime = 60;
 
-  const utilizedTime = Math.max(
-    totalTime -
-      Math.floor(
-        timeLeft / 60
-      ),
-    0
-  );
+    const utilizedTime =
+    Math.max(
+        totalTime -
+        Math.floor(
+            timeLeft / 60
+        ),
+        0
+    );
 
-  const wastedTime = Math.max(
-    totalTime -
-      utilizedTime,
-    0
-  );
+    const wastedTime =
+    Math.max(
+        totalTime -
+        utilizedTime,
+        0
+    );
   const cardStyle = {
     background: "#ffffff",
     borderRadius: "12px",

@@ -12,7 +12,7 @@ type Question = {
   description?: string;
 
   image_path?: string;
-  shared_image_path?: string;
+
   option_a: string;
   option_b: string;
   option_c: string;
@@ -299,7 +299,7 @@ export default function TakeExam() {
 
   console.log(
     "CURRENT IMAGE:",
-    currentData?.shared_image_path
+    currentData?.image_path
   );
 
   const selectedAnswer =
@@ -319,64 +319,31 @@ export default function TakeExam() {
       }));
     };
 
-  const saveAndNext = () => {
-
-    if (answers[currentQuestion]) {
-
-      setQuestionStatusForCurrent(
-        "answered"
-      );
-
-    } else {
-
-      setQuestionStatusForCurrent(
-        "unseen"
-      );
-
-    }
-
-    if (currentQuestion < totalQuestions) {
-
-      setCurrentQuestion(
-        currentQuestion + 1
-      );
-
-    }
-
-  };
-
- const skipQuestion = () => {
-
-      setQuestionStatusForCurrent(
-        "skipped"
-      );
-
-      if (currentQuestion < totalQuestions) {
-
-        setCurrentQuestion(
-          currentQuestion + 1
-        );
-
+    const saveAndNext = () => {
+      if (answers[currentQuestion]) {
+        setQuestionStatusForCurrent("answered");
       }
 
+      if (currentQuestion < totalQuestions) {
+        setCurrentQuestion(currentQuestion + 1);
+      }
     };
-  
 
-  const markForReview = () => {
+    const skipQuestion = () => {
+      setQuestionStatusForCurrent("skipped");
 
-    setQuestionStatusForCurrent(
-      "review"
-    );
+      if (currentQuestion < totalQuestions) {
+        setCurrentQuestion(currentQuestion + 1);
+      }
+    };
 
-    if (currentQuestion < totalQuestions) {
+    const markForReview = () => {
+      setQuestionStatusForCurrent("review");
 
-      setCurrentQuestion(
-        currentQuestion + 1
-      );
-
-    }
-
-  };
+      if (currentQuestion < totalQuestions) {
+        setCurrentQuestion(currentQuestion + 1);
+      }
+    };
 
   const attempted =
     Object.values(
@@ -488,44 +455,39 @@ export default function TakeExam() {
             {totalQuestions}
           </h3>
 
-          <div
+          <p>
+            <strong>
+              {currentData.question}
+            </strong>
+          </p>
+
+          {currentData.description && (
+            <div
               style={{
-                whiteSpace: "pre-wrap"
+                marginTop: "10px",
+                whiteSpace: "pre-wrap",
+                padding: "10px",
+                background: "#f5f5f5",
+                borderRadius: "6px",
               }}
             >
-              <strong>
-                {currentData.question}
-              </strong>
+              {currentData.description}
             </div>
+          )}
 
-         {currentData.description && (
-          <div
-            style={{
-              marginTop: "10px",
-              whiteSpace: "pre-wrap",
-              padding: "10px",
-              background: "#f5f5f5",
-              borderRadius: "6px",
-            }}
-          >
-            {currentData.description}
-        </div>
-        )}
-
-            {currentData.shared_image_path && (
-              <div style={{ marginTop: "15px" }}>
-                <img
-                  src={currentData.shared_image_path}
-                  alt="Question"
-                  style={{
-                    maxWidth: "100%",
-                    border: "1px solid #ccc",
-                    borderRadius: "6px",
-                  }}
-                />
-              </div>
-      
-        )}
+          {currentData.image_path && (
+            <div style={{ marginTop: "15px" }}>
+              <img
+                src={currentData.image_path}
+                alt="Question"
+                style={{
+                  maxWidth: "100%",
+                  border: "1px solid #ccc",
+                  borderRadius: "6px",
+                }}
+              />
+            </div>
+          )}
 
           <div>
             <input
@@ -541,6 +503,7 @@ export default function TakeExam() {
                 })
               }
             />
+            {" "}
             {
               currentData.option_a
             }
@@ -560,6 +523,7 @@ export default function TakeExam() {
                 })
               }
             />
+            {" "}
             {
               currentData.option_b
             }
@@ -579,6 +543,7 @@ export default function TakeExam() {
                 })
               }
             />
+            {" "}
             {
               currentData.option_c
             }
