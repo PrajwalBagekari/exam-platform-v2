@@ -15,7 +15,7 @@ class WorkflowManager:
         # -------------------
 
         pdf_response = requests.post(
-            "http://127.0.0.1:8001/process",
+            "http://pdf-service:8001/process",
             params={
                 "pdf_path": pdf_path
             }
@@ -30,7 +30,7 @@ class WorkflowManager:
         # -------------------
 
         image_response = requests.post(
-            "http://127.0.0.1:8005/render",
+            "http://image-service:8005/render",
             params={
                 "pdf_path": pdf_path
             }
@@ -58,7 +58,7 @@ class WorkflowManager:
             try:
 
                 response = requests.post(
-                    "http://127.0.0.1:8004/extract",
+                    "http://rag-service:8004/extract",
                     params={
                         "image_path": page
                     }

@@ -8,7 +8,7 @@ def pdf_node(state):
     print("PDF PATH:", state["pdf_path"])
 
     response = requests.post(
-        "http://127.0.0.1:8001/process",
+        "http://pdf-service:8001",
         params={
             "pdf_path": state["pdf_path"]
         }
@@ -32,7 +32,7 @@ def image_node(state):
     print("IMAGE NODE")
 
     response = requests.post(
-        "http://127.0.0.1:8005/render",
+        "http://image-service:8005/render",
         params={
             "pdf_path": state["pdf_path"]
         }
@@ -67,7 +67,7 @@ def ocr_node(state):
         print("PROCESSING:", page)
 
         response = requests.post(
-            "http://127.0.0.1:8004/extract",
+            "http://ocr-service:8004/extract",
             params={
                 "image_path": page
             }
@@ -130,7 +130,7 @@ def question_node(state):
     print("=" * 60)
 
     response = requests.post(
-        "http://127.0.0.1:8002/questions",
+        "http://question-service:8002/questions",
         json={
             "text": full_text,
             "images": state["pdf_data"]["images"]
@@ -205,7 +205,7 @@ def rag_node(state):
 def exam_node(state):
 
     response = requests.post(
-        "http://127.0.0.1:8006/save",
+        "http://exam-service:8006/save",
         json={
             "questions": state["questions"]
         }
