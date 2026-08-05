@@ -54,17 +54,12 @@ builder.set_entry_point(
 # Workflow
 builder.add_edge(
     "pdf",
+    "image"
+)
+
+builder.add_edge(
+    "image",
     "question"
-)
-
-builder.add_edge(
-    "question",
-    "rag"
-)
-
-builder.add_edge(
-    "rag",
-    "exam"
 )
 
 builder.add_edge(
