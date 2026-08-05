@@ -1,11 +1,4 @@
-from sentence_transformers import (
-    SentenceTransformer
-)
-
-import faiss
-
-import numpy as np
-
+    
 class RAG:
 
     def build(self, data):

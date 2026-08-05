@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from paddle.static import data
 
 from question_parser import (
     extract_questions
