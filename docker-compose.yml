@@ -25,6 +25,8 @@ services:
     image: prajwalbagekari/pdf-service:latest
     ports:
       - "8001:8001"
+    volumes:
+      - uploads:/app/uploads
 
   question-service:
     image: prajwalbagekari/question-service:latest
@@ -51,3 +53,8 @@ services:
       - image-service
     ports:
       - "8008:8008"
+    volumes:
+      - uploads:/app/uploads
+
+volumes:
+  uploads:
