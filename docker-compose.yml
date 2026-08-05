@@ -15,6 +15,7 @@ services:
       - postgres
     ports:
       - "8006:8006"
+
   gateway:
     image: prajwalbagekari/gateway:latest
     ports:
@@ -29,6 +30,7 @@ services:
     image: prajwalbagekari/question-service:latest
     ports:
       - "8002:8002"
+
   rag-service:
     image: prajwalbagekari/rag-service:latest
     ports:
@@ -41,10 +43,6 @@ services:
 
   langgraph-service:
     image: prajwalbagekari/langgraph-service:latest
-<<<<<<< HEAD
-
-=======
->>>>>>> 821edad (Replace localhost references)
     depends_on:
       - exam-service
       - pdf-service

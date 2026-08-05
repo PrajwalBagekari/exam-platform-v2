@@ -180,7 +180,7 @@ def rag_node(state):
     print("=" * 60)
 
     response = requests.post(
-        "http://127.0.0.1:8003/build",
+        "http://rag-service:8003/build",
         json={
             "data": state["questions"]
         }
