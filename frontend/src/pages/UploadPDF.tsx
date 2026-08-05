@@ -22,7 +22,7 @@ export default function UploadPDF() {
       );
 
       const response = await fetch(
-        "https://pdf2exam.org:8008/upload",
+        "https://pdf2exam.org/upload",
         {
           method: "POST",
           body: formData,

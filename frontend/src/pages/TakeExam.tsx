@@ -167,7 +167,7 @@ export default function TakeExam() {
 
         const response =
           await axios.get(
-            `https://pdf2exam.org:8006/exam/${id}/questions`
+            `https://pdf2exam.org/exam/${id}/questions`
           );
 
         console.log(
