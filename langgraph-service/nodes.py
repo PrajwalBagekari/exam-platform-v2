@@ -8,7 +8,7 @@ def pdf_node(state):
     print("PDF PATH:", state["pdf_path"])
 
     response = requests.post(
-        "http://pdf-service:8001",
+        "http://pdf-service:8001/process",
         params={
             "pdf_path": state["pdf_path"]
         }
