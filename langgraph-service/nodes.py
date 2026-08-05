@@ -129,15 +129,13 @@ def question_node(state):
     print(len(state["pdf_data"].get("images", [])))
     print("=" * 60)
 
-    images = state["pdf_data"].get("images", [])
-
     response = requests.post(
-        "http://question-service:8002/questions",
-        json={
-            "text": full_text,
-            "images": images
-        }
-    )
+    "http://question-service:8002/questions",
+    json={
+        "text": full_text,
+        "images": state["pdf_data"].get("images", [])
+    }
+)
 
     print(
         "QUESTION STATUS:",
