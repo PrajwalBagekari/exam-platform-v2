@@ -20,7 +20,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://pdf2exam.org"
+        "https://pdf2exam.org"
     ],
     allow_credentials=True,
     allow_methods=["*"],

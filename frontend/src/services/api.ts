@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://pdf-service:8001"
+  baseURL: "https://pdf-service:8001"
 });
