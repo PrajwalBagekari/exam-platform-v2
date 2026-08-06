@@ -1,5 +1,6 @@
 import fitz
 import os
+import shutil
 
 
 class ImageService:
@@ -9,8 +10,14 @@ class ImageService:
         pdf_path
     ):
 
+        output_dir = "rendered_pages"
+
+        # Remove old rendered pages
+        if os.path.exists(output_dir):
+            shutil.rmtree(output_dir)
+
         os.makedirs(
-            "rendered_pages",
+            output_dir,
             exist_ok=True
         )
 
@@ -27,7 +34,7 @@ class ImageService:
             )
 
             output_path = os.path.abspath(
-                f"rendered_pages/page_{page_num}.png"
+                f"{output_dir}/page_{page_num}.png"
             )
 
             pix.save(

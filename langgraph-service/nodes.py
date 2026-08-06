@@ -1,5 +1,16 @@
 import requests
 
+from utils.cleanup import cleanup_processing_files
+
+def cleanup_node(state):
+
+    cleanup_processing_files(
+        pdf_path=state.get("pdf_path"),
+        rendered_pages_dir="/app/rendered_pages",
+        temp_dir="/app/temp"
+    )
+
+    return state
 
 def pdf_node(state):
 
@@ -32,7 +43,7 @@ def image_node(state):
     print("IMAGE NODE")
 
     response = requests.post(
-        "https://image-service:8005/render",
+        "http://image-service:8005/render",
         params={
             "pdf_path": state["pdf_path"]
         }
@@ -225,5 +236,9 @@ def exam_node(state):
         return state
 
     state["exam_data"] = response.json()
+    
+    cleanup_processing_files(
+        pdf_path=state["pdf_path"]
+    )
 
     return state
