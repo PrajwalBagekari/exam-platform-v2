@@ -185,6 +185,7 @@ def extract_questions(
         )
 
     for block in blocks:
+        table_data = None
 
         question_match = re.search(
             r"^(Q\d+\..*?)(?=\(a\)|$)",
@@ -258,6 +259,7 @@ def extract_questions(
         directions = None
 
         shared_image_path = None
+        table_data = None
 
         image_match = re.search(
             r"\[\[IMAGE:(.*?)\]\]",
