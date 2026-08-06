@@ -24,6 +24,7 @@ def questions(data: dict):
 
     print("REQUEST DATA:")
     print(data)
+
     text = data.get(
         "text",
         ""
@@ -34,12 +35,27 @@ def questions(data: dict):
         []
     )
 
+    tables = data.get(
+        "tables",
+        []
+    )
+
     print("IMAGES RECEIVED:")
     print(images)
 
+    print("IMAGE COUNT:")
+    print(len(images))
+
+    print("TABLES RECEIVED:")
+    print(tables)
+
+    print("TABLE COUNT:")
+    print(len(tables))
+
     extracted_questions = extract_questions(
-        text,
-        images
+        text=text,
+        images=images,
+        tables=tables
     )
 
     print("=" * 60)

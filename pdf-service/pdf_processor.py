@@ -22,6 +22,39 @@ class PDFProcessor:
         cv.close()
 
         doc = Document(docx_path)
+        extracted_tables = []
+
+        print("\nTABLES FOUND:")
+        print(len(doc.tables))
+
+        for table_index, table in enumerate(doc.tables):
+
+            table_rows = []
+
+            for row in table.rows:
+
+                row_data = []
+
+                for cell in row.cells:
+
+                    row_data.append(
+                        cell.text.strip()
+                    )
+
+                table_rows.append(
+                    row_data
+                )
+
+            extracted_tables.append(
+                {
+                    "table_index": table_index,
+                    "rows": table_rows
+                }
+            )
+
+        print("\nEXTRACTED TABLES:")
+        print(extracted_tables)
+
 
         print("\nBUILDING IMAGE MAPPINGS\n")
 
@@ -281,5 +314,6 @@ class PDFProcessor:
         return {
             "docx": docx_path,
             "text": cleaned_text,
-            "images": image_paths
+            "images": image_paths,
+            "tables": extracted_tables
         }

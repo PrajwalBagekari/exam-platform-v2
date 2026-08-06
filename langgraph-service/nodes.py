@@ -1,16 +1,8 @@
 import requests
 
-from utils.cleanup import cleanup_processing_files
+from cleanup import cleanup_processing_files
 
-def cleanup_node(state):
 
-    cleanup_processing_files(
-        pdf_path=state.get("pdf_path"),
-        rendered_pages_dir="/app/rendered_pages",
-        temp_dir="/app/temp"
-    )
-
-    return state
 
 def pdf_node(state):
 
@@ -138,15 +130,19 @@ def question_node(state):
 
     print("IMAGE COUNT:")
     print(len(state["pdf_data"].get("images", [])))
+    print("TABLES:")
+    print(state["pdf_data"].get("tables"))
+    print("TABLE COUNT:")
+    print(len(state["pdf_data"].get("tables", [])))
     print("=" * 60)
 
     response = requests.post(
-        "https://question-service:8002/questions",
+        "http://question-service:8002/questions",
         json={
             "text": full_text,
-            "images": state["pdf_data"].get("images", [])
+            "images": state["pdf_data"].get("images", []),
+            "tables": state["pdf_data"].get("tables", [])
         }
-
     )
 
     print(
@@ -236,9 +232,10 @@ def exam_node(state):
         return state
 
     state["exam_data"] = response.json()
-    
+
     cleanup_processing_files(
-        pdf_path=state["pdf_path"]
+        pdf_path=state.get("pdf_path"),
+        rendered_pages_dir=state.get("rendered_pages")
     )
 
     return state

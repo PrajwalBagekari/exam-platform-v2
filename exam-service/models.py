@@ -5,6 +5,14 @@ from sqlalchemy import (
     Text,
     ForeignKey
 )
+from pydantic import BaseModel
+
+class QuestionSchema(BaseModel):
+    question: str
+    description: str | None = None
+    shared_image_path: str | None = None
+    image_path: str | None = None
+    table_data: str | None = None
 
 from database import Base
 
@@ -84,3 +92,7 @@ class Question(Base):
     correct_answer = Column(String)
 
     image_path = Column(String)
+    table_data = Column(
+        Text,
+        nullable=True
+    )

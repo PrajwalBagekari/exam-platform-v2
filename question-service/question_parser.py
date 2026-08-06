@@ -53,13 +53,16 @@ def clean_option(option_text):
     return " ".join(lines)
 
 def extract_questions(
-    text: str,
-    images=None
-):
-    
+        text: str,
+        images=None,
+        tables=None
+    ):
 
     if images is None:
         images = []
+
+    if tables is None:
+        tables = []
 
     print("\nIMAGES PASSED TO PARSER:")
     print(images)
@@ -327,6 +330,12 @@ def extract_questions(
                 shared_image_path = (
                     group["shared_image_path"]
                 )
+                print(tables)
+                len(tables)
+                table_data = tables
+
+
+
                 print(
                     "IMAGE FOUND FOR QUESTION:",
                     question_number,
@@ -381,6 +390,9 @@ def extract_questions(
                 "image_path":
                 shared_image_path,
 
+                "table_data":
+                table_data,
+
                 "options":
                 options,
 
@@ -389,6 +401,7 @@ def extract_questions(
 
                 "group_type":
                 group_type
+
             }
         )
 
