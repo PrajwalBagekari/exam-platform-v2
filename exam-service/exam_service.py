@@ -1,4 +1,3 @@
-from chromadb import db
 
 from database import (
     SessionLocal
