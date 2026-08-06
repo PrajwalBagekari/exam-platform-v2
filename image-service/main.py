@@ -26,23 +26,14 @@ def health():
 @app.post("/render")
 def render(pdf_path: str):
 
-    pages = service.render_pdf(
-        pdf_path
-    )
-
-    return {
-        "total_pages": len(pages),
-        "pages": pages
-    }
-
-@app.post("/render")
-def render(pdf_path: str):
-
     print("=" * 50)
     print("PDF PATH RECEIVED:")
     print(pdf_path)
     print("=" * 50)
 
+    pages = service.render_pdf(pdf_path)
+
     return {
-        "pages": service.render_pdf(pdf_path)
+        "total_pages": len(pages),
+        "pages": pages
     }
