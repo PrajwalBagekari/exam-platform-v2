@@ -299,9 +299,10 @@ def extract_questions(
 
             if shared_image_path:
 
-                relative_path = shared_image_path.split(
-                    "uploads\\"
-                )[1]
+                relative_path = shared_image_path.replace(
+                    "/app/uploads/",
+                    ""
+                )
 
                 relative_path = relative_path.replace(
                     "\\",
