@@ -68,6 +68,10 @@ class ExamService:
                     shared_image_path=q.get(
                         "image_path",
                     ),
+
+                    image_path=q.get(
+                        "image_path",
+                    ),
                     table_data=q.get(
                         "table_data",
                         []
