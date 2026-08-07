@@ -6,11 +6,7 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 from pathlib import Path
 
-UPLOADS_DIR = (
-    Path(__file__).resolve().parent.parent
-    / "langgraph-service"
-    / "uploads"
-)
+UPLOADS_DIR = "/app/uploads"
 
 app.mount(
     "/images",
