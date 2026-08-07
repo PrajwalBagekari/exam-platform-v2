@@ -107,6 +107,22 @@ def extract_questions(
 
             group_type = "bar_graph"
 
+        image_path = re.search(
+            r"image_[^\]\s]+",
+            directions_text
+        )
+
+        print("\n===================")
+        print("GROUP RANGE:", start, "-", end)
+        print("GROUP TYPE:", group_type)
+        print(
+            "IMAGE MATCH:",
+            image_path.group(0) if image_path else None
+        )
+        print("DIRECTIONS PREVIEW:")
+        print(directions_text[:500])
+        print("===================\n")
+
         direction_groups.append(
             {
                 "start": int(start),
@@ -117,10 +133,7 @@ def extract_questions(
                 directions_text.strip(),
 
                 "shared_image_path":
-                image_path.group(0) if (image_path := re.search(
-                    r"image_[^\]\s]+",
-                    directions_text
-                )) else None,
+                image_path.group(0) if image_path else None,
 
                 "group_type":
                 group_type
