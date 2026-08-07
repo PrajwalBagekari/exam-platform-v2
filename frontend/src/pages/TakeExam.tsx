@@ -10,6 +10,7 @@ type Question = {
   question: string;
 
   description?: string;
+  table?: string;
 
   image_path?: string;
 

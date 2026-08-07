@@ -275,7 +275,7 @@ def extract_questions(
         shared_image_path = None
         table_data = None
 
-        image_match = re.search(
+        image_matches = re.findall(
             r"\[\[IMAGE:(.*?)\]\]",
             block
         )
@@ -285,9 +285,9 @@ def extract_questions(
             block
         )
 
-        if image_match:
+        if image_matches:
 
-            image_file = image_match.group(1).strip()
+            image_file = image_matches[0].strip()
 
             shared_image_path = next(
                 (
@@ -313,7 +313,12 @@ def extract_questions(
                 shared_image_path = (
                     f"https://pdf2exam.org:8001/images/{relative_path}"
                 )
-                
+
+                print(
+                    "FINAL IMAGE URL:",
+                    repr(shared_image_path)
+                )
+                            
 
         group_type = None
         if question_number_match:
@@ -391,6 +396,7 @@ def extract_questions(
             "TYPE:",
             group_type
         )
+
         questions.append(
             {
                 "section": "General",
@@ -405,7 +411,9 @@ def extract_questions(
                 directions,
 
                 "image_path":
-                shared_image_path,
+                str(shared_image_path)
+                if shared_image_path
+                else None,
 
                 "table_data":
                 table_data,
@@ -420,6 +428,8 @@ def extract_questions(
                 group_type
 
             }
+            
+            
         )
 
     print(
