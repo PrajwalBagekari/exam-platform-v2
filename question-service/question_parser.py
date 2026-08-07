@@ -1,3 +1,4 @@
+import os
 import re
 from collections import Counter
 from fastapi import FastAPI
@@ -286,13 +287,13 @@ def extract_questions(
 
         if image_match:
 
-            image_file = image_match.group(1)
+            image_file = image_match.group(1).strip()
 
             shared_image_path = next(
                 (
                     img
                     for img in images
-                    if img.endswith(image_file)
+                    if os.path.basename(img) == image_file
                 ),
                 None
             )
