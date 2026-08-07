@@ -1,8 +1,8 @@
 from pdf2docx import Converter
 from docx import Document
 from pathlib import Path
-import os
 import zipfile
+import os
 
 
 def process_pdf(pdf_path):
@@ -12,9 +12,7 @@ def process_pdf(pdf_path):
     docx_path = pdf_path.with_suffix(".docx")
 
     cv = Converter(str(pdf_path))
-
     cv.convert(str(docx_path))
-
     cv.close()
 
     doc = Document(str(docx_path))
@@ -22,7 +20,6 @@ def process_pdf(pdf_path):
     for section in doc.sections:
 
         header = section.header
-
         footer = section.footer
 
         for paragraph in header.paragraphs:
@@ -42,8 +39,8 @@ def process_pdf(pdf_path):
         text = para.text.strip()
 
         if text:
-
             extracted_text.append(text)
+
     image_dir = str(docx_path).replace(
         ".docx",
         "_images"
@@ -56,31 +53,52 @@ def process_pdf(pdf_path):
 
     image_paths = []
 
-    with zipfile.ZipFile(docx_path, "r") as docx_zip:
+    try:
 
-        media_files = [
-            f for f in docx_zip.namelist()
-            if f.startswith("word/media/")
-        ]
+        with zipfile.ZipFile(
+            str(docx_path),
+            "r"
+        ) as docx_zip:
 
-        for i, media_file in enumerate(media_files, start=1):
+            media_files = [
+                f
+                for f in docx_zip.namelist()
+                if f.startswith("word/media/")
+            ]
 
-            ext = os.path.splitext(media_file)[1]
+            for index, media_file in enumerate(
+                media_files,
+                start=1
+            ):
 
-            output_file = os.path.join(
-                image_dir,
-                f"image_{i}{ext}"
-            )
+                extension = os.path.splitext(
+                    media_file
+                )[1]
 
-            with open(output_file, "wb") as f:
-
-                f.write(
-                    docx_zip.read(media_file)
+                output_file = os.path.join(
+                    image_dir,
+                    f"image_{index}{extension}"
                 )
 
-            image_paths.append(
-                output_file
-            )
+                with open(
+                    output_file,
+                    "wb"
+                ) as f:
+
+                    f.write(
+                        docx_zip.read(media_file)
+                    )
+
+                image_paths.append(
+                    output_file
+                )
+
+    except Exception as e:
+
+        print(
+            "IMAGE EXTRACTION ERROR:",
+            str(e)
+        )
 
     print("IMAGES EXTRACTED:")
     print(image_paths)
