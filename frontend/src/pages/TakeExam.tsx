@@ -181,9 +181,14 @@ export default function TakeExam() {
         );
 
         const sortedQuestions =
-          [...(response.data.questions || [])].sort(
-            (a: any, b: any) => {
-
+          [...(response.data.questions || [])]
+            .map((q: any) => ({
+              ...q,
+              image_path: q.image_path
+                ? q.image_path.replace(/<[^>]*>/g, "")
+                : null,
+            }))
+            .sort((a: any, b: any) => {
               const qa = Number(
                 a.question.match(/^Q(\d+)/)?.[1] || 0
               );
@@ -193,8 +198,7 @@ export default function TakeExam() {
               );
 
               return qa - qb;
-            }
-          );
+            });
 
         console.log(
           "SORTED QUESTION NUMBERS",
