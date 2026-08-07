@@ -1,6 +1,8 @@
 from pdf2docx import Converter
 from docx import Document
 from pathlib import Path
+import os
+import zipfile
 
 
 def process_pdf(pdf_path):
@@ -42,9 +44,50 @@ def process_pdf(pdf_path):
         if text:
 
             extracted_text.append(text)
+    image_dir = str(docx_path).replace(
+        ".docx",
+        "_images"
+    )
+
+    os.makedirs(
+        image_dir,
+        exist_ok=True
+    )
+
+    image_paths = []
+
+    with zipfile.ZipFile(docx_path, "r") as docx_zip:
+
+        media_files = [
+            f for f in docx_zip.namelist()
+            if f.startswith("word/media/")
+        ]
+
+        for i, media_file in enumerate(media_files, start=1):
+
+            ext = os.path.splitext(media_file)[1]
+
+            output_file = os.path.join(
+                image_dir,
+                f"image_{i}{ext}"
+            )
+
+            with open(output_file, "wb") as f:
+
+                f.write(
+                    docx_zip.read(media_file)
+                )
+
+            image_paths.append(
+                output_file
+            )
+
+    print("IMAGES EXTRACTED:")
+    print(image_paths)
 
     return {
         "pdf_file": str(pdf_path),
         "docx_file": str(docx_path),
-        "text": "\n".join(extracted_text)
+        "text": "\n".join(extracted_text),
+        "images": image_paths
     }
