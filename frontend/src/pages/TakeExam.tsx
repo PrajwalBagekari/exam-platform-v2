@@ -10,7 +10,7 @@ type Question = {
   question: string;
 
   description?: string;
-  table?: string;
+  table_data?: any;
 
   image_path?: string;
 
@@ -501,6 +501,25 @@ export default function TakeExam() {
                 }}
               />
             </div>
+          )}
+          {currentData.table_data && (
+            <table border={1}>
+              <tbody>
+                {currentData.table_data.map(
+                  (row: any[], index: number) => (
+                    <tr key={index}>
+                      {row.map(
+                        (cell, cellIndex) => (
+                          <td key={cellIndex}>
+                            {cell}
+                          </td>
+                        )
+                      )}
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
           )}
 
           <div>
