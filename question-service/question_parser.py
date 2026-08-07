@@ -311,8 +311,8 @@ def extract_questions(
                 )
 
                 shared_image_path = (
-                    f"http://pdf2exam.org:8001/images/{relative_path}"
-                )
+    f"http://pdf2exam.org:8001/images/{relative_path}"
+)
 
                 print(
                     "FINAL IMAGE URL:",
