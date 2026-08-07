@@ -479,6 +479,15 @@ export default function TakeExam() {
               {currentData.description}
             </div>
           )}
+          console.log(
+              "IMAGE PATH RAW:",
+              currentData?.image_path
+            );
+
+          console.log(
+              "IMAGE SRC:",
+              currentData?.image_path
+            );
 
           {currentData.image_path && (
             <div style={{ marginTop: "15px" }}>
