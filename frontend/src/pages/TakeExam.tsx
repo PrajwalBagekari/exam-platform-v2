@@ -462,34 +462,50 @@ export default function TakeExam() {
           </h3>
 
           {currentData.is_code ? (
-            <pre
+            <div
               style={{
-                whiteSpace: "pre-wrap",
-                overflowX: "auto",
-                background: "#f8fafc",
-                padding: "15px",
-                borderRadius: "8px",
-                border: "1px solid #e2e8f0"
+                marginTop: "15px",
+                marginBottom: "15px",
               }}
             >
-              {currentData.question}
-            </pre>
+              <pre
+                style={{
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
+                  overflowX: "auto",
+                  background: "#f8fafc",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  border: "1px solid #e2e8f0",
+                  fontFamily: "Consolas, Monaco, 'Courier New', monospace",
+                  fontSize: "14px",
+                  lineHeight: "1.6",
+                  margin: 0,
+                }}
+              >
+                {currentData.question
+                  ?.replace(/\s*#include/g, "\n#include")
+                  ?.replace(/\s*using namespace/g, "\n\nusing namespace")
+                  ?.replace(/\s*int main/g, "\n\nint main")
+                  ?.replace(/\s*void /g, "\n\nvoid ")
+                }
+              </pre>
+            </div>
           ) : (
             <p>
-              <strong>
-                {currentData.question}
-              </strong>
+              <strong>{currentData.question}</strong>
             </p>
           )}
 
           {currentData.description && (
             <div
               style={{
-                marginTop: "10px",
+                marginTop: "15px",
                 whiteSpace: "pre-wrap",
-                padding: "10px",
+                padding: "15px",
                 background: "#f5f5f5",
                 borderRadius: "6px",
+                lineHeight: "1.6",
               }}
             >
               {currentData.description}

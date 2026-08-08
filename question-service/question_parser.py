@@ -240,6 +240,11 @@ def extract_questions(
                 r"\[\[IMAGE:.*?\]\]",
                 "",
                 question_text
+            question_text = re.sub(
+                r"\n\d+\n\s*$",
+                "",
+                question_text
+            )
             ).strip()
 
             is_code = looks_like_code(question_text)
