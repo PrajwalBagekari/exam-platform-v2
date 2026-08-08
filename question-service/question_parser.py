@@ -1,8 +1,5 @@
 import os
 import re
-from collections import Counter
-from bs4 import BeautifulSoup
-from fastapi import FastAPI
 
 
 DIRECTION_PATTERN = re.compile(
