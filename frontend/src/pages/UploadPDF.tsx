@@ -27,17 +27,30 @@ export default function UploadPDF() {
         file
       );
 
-      const response =
-        await fetch(
-          "https://pdf2exam.org/upload",
-          {
-            method: "POST",
-            body: formData,
-          }
+      const response = await fetch(
+        "https://pdf2exam.org/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const responseText =
+        await response.text();
+
+      console.log(
+        "Server Response:",
+        responseText
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          responseText
         );
+      }
 
       const data =
-        await response.json();
+        JSON.parse(responseText);
 
       console.log(
         "Response:",
