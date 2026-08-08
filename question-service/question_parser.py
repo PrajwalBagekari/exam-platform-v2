@@ -236,13 +236,14 @@ def extract_questions(
                 .strip()
             )
 
-            if not looks_like_code(question_text):
-                question_text = re.sub(
-                    r"\[\[IMAGE:.*?\]\]",
-                    "",
-                    question_text
-                ).strip()
-        is_code = looks_like_code(question_text)
+            question_text = re.sub(
+                r"\[\[IMAGE:.*?\]\]",
+                "",
+                question_text
+            ).strip()
+
+            is_code = looks_like_code(question_text)
+
         options = []
 
         for _, option_text in option_matches:
