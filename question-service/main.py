@@ -51,6 +51,11 @@ def questions(data: dict):
 
     print("TABLE COUNT:")
     print(len(tables))
+    print("=" * 100)
+    print("RAW TEXT SAMPLE")
+    print("=" * 100)
+    print(text[:5000])
+    print("=" * 100)
 
     extracted_questions = extract_questions(
         text=text,
