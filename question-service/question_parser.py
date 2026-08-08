@@ -314,16 +314,6 @@ def extract_questions(
                 shared_image_path = (
                     f"http://pdf2exam.org:8001/images/{relative_path}"
                 )
-                soup = BeautifulSoup(
-                    shared_image_path,
-                    "html.parser"
-                )
-
-                shared_image_path = (
-                    soup.a["href"]
-                    if soup.a
-                    else None
-                )
 
                 print(
                     "FINAL IMAGE URL:",

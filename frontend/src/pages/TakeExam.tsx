@@ -8,6 +8,7 @@ import QuestionPalette from "../components/QuestionPalette";
 type Question = {
   id: number;
   question: string;
+  is_code?: boolean;
 
   description?: string;
   table_data?: any;
@@ -460,11 +461,26 @@ export default function TakeExam() {
             {totalQuestions}
           </h3>
 
-          <p>
-            <strong>
+          {currentData.is_code ? (
+            <pre
+              style={{
+                whiteSpace: "pre-wrap",
+                overflowX: "auto",
+                background: "#f8fafc",
+                padding: "15px",
+                borderRadius: "8px",
+                border: "1px solid #e2e8f0"
+              }}
+            >
               {currentData.question}
-            </strong>
-          </p>
+            </pre>
+          ) : (
+            <p>
+              <strong>
+                {currentData.question}
+              </strong>
+            </p>
+          )}
 
           {currentData.description && (
             <div
