@@ -404,6 +404,8 @@ def extract_questions(
         )
         if question_number == 1 and tables:
             table_data = tables[0]
+        print("TABLES RECEIVED:")
+        print(tables)
 
         questions.append(
             {
