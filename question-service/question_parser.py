@@ -182,6 +182,8 @@ def extract_questions(
     print(
         "\nIMAGE COUNTS:"
     )
+    print("TABLES RECEIVED:")
+    print(tables)
 
 
 
@@ -396,8 +398,12 @@ def extract_questions(
             "IMAGE:",
             shared_image_path,
             "TYPE:",
-            group_type
+            group_type,
+            "TABLE DATA:",
+            table_data
         )
+        if question_number == 1 and tables:
+            table_data = tables[0]
 
         questions.append(
             {

@@ -299,6 +299,10 @@ export default function TakeExam() {
     currentData?.question
   );
   console.log(
+  "CURRENT TABLE:",
+  currentData.table_data
+  );
+  console.log(
     "CURRENT DESCRIPTION:",
     currentData?.description
   );
@@ -534,26 +538,38 @@ export default function TakeExam() {
               />
             </div>
           )}
-          {currentData.table_data && (
-            <table border={1}>
-              <tbody>
-                {currentData.table_data.map(
-                  (row: any[], index: number) => (
-                    <tr key={index}>
-                      {row.map(
-                        (cell, cellIndex) => (
-                          <td key={cellIndex}>
-                            {cell}
-                          </td>
-                        )
-                      )}
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-          )}
-
+          {currentData.table_data &&
+            Array.isArray(currentData.table_data) && (
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  marginTop: "15px",
+                }}
+              >
+                <tbody>
+                  {currentData.table_data.map(
+                    (row: any, rowIndex: number) => (
+                      <tr key={rowIndex}>
+                        {row.map(
+                          (cell: any, cellIndex: number) => (
+                            <td
+                              key={cellIndex}
+                              style={{
+                                border: "1px solid #ccc",
+                                padding: "8px",
+                              }}
+                            >
+                              {cell}
+                            </td>
+                          )
+                        )}
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            )}
           <div>
             <input
               type="radio"
