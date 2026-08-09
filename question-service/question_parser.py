@@ -51,6 +51,7 @@ def clean_option(option_text):
 
     return " ".join(lines)
 
+
 def extract_questions(
         text: str,
         images=None,
@@ -347,9 +348,13 @@ def extract_questions(
                 <= group["end"]
             ):
 
-                directions = (
-                    group["directions"]
-                )
+                directions = group["directions"]
+
+                directions = re.sub(
+                    r"\[\[IMAGE:.*?\]\]",
+                    "",
+                    directions
+                ).strip()
 
                 shared_image_path = (
                     group["shared_image_path"]
