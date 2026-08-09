@@ -184,6 +184,10 @@ def extract_questions(
     )
     print("TABLES RECEIVED:")
     print(tables)
+    print("TABLE COUNT:", len(tables))
+
+    if tables:
+        print("FIRST TABLE:", tables[0])
 
 
 
@@ -356,11 +360,6 @@ def extract_questions(
                 shared_image_path = (
                     group["shared_image_path"]
                 )
-                print(tables)
-                len(tables)
-                table_data = tables
-
-
 
                 print(
                     "IMAGE FOUND FOR QUESTION:",
@@ -402,11 +401,29 @@ def extract_questions(
             "TABLE DATA:",
             table_data
         )
-        if question_number == 1 and tables:
-            table_data = tables[0]
-        print("TABLES RECEIVED:")
-        print(tables)
+        table_data = None
 
+        for group in direction_groups:
+
+            if (
+                question_number is not None
+                and group["start"] <= question_number <= group["end"]
+            ):
+
+                table_data = tables
+                break
+
+
+        if (
+            question_number == 1
+            and tables
+        ):
+            table_data = tables[0]
+
+
+        if question_number == 1:
+            print("Q1 TABLE DATA:")
+            print(table_data)
         questions.append(
             {
                 "section": "General",
