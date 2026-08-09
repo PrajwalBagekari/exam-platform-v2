@@ -63,11 +63,7 @@ def extract_questions(
     if tables is None:
         tables = []
 
-    print("\nIMAGES PASSED TO PARSER:")
-    print(images)
 
-    print("IMAGE COUNT:")
-    print(len(images))
 
 
     questions = []
@@ -326,8 +322,6 @@ def extract_questions(
                     "FINAL IMAGE URL:",
                     repr(shared_image_path)
                 )
-                            
-
         group_type = None
         if question_number_match:
 
@@ -413,17 +407,18 @@ def extract_questions(
                 table_data = tables
                 break
 
-
         if (
             question_number == 1
-            and tables
+            and len(tables) > 0
         ):
             table_data = tables[0]
+        print(
+            "QUESTION:",
+            question_number,
+            "TABLE:",
+            table_data
+        )
 
-
-        if question_number == 1:
-            print("Q1 TABLE DATA:")
-            print(table_data)
         questions.append(
             {
                 "section": "General",
