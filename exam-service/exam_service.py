@@ -64,6 +64,10 @@ class ExamService:
                         directions=q.get(
                         "description"
                     ),
+                    is_code=question.get(
+                        "is_code",
+                        False
+                    ),
 
                     shared_image_path=q.get(
                         "image_path",

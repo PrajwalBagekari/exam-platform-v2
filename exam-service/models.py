@@ -3,7 +3,8 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
-    ForeignKey
+    ForeignKey,
+    Boolean
 )
 from pydantic import BaseModel
 
