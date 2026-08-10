@@ -53,6 +53,12 @@ class ExamService:
                     "options",
                     []
                 )
+                print(
+                    "SAVING:",
+                    q.get("question", "")[:50],
+                    "IS_CODE:",
+                    q.get("is_code")
+                )
 
                 question = Question(
                     section_id=section.id,
@@ -114,6 +120,8 @@ class ExamService:
                     correct_answer=q.get(
                         "correct_answer"
                     )
+                    
+                
                 )
                 db.add(question)
 
