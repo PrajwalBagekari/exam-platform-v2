@@ -537,107 +537,61 @@ export default function TakeExam() {
                 </tbody>
               </table>
             )}
-          <div>
-            <input
-              type="radio"
-              name="q"
-              checked={
-                selectedAnswer === "A"
-              }
-              onChange={() =>
-                setAnswers({
-                  ...answers,
-                  [currentQuestion]: "A",
-                })
-              }
-            />
-            {" "}
-            {
-              currentData.option_a
-            }
-          </div>
+          {[
+              { key: "A", text: currentData.option_a },
+              { key: "B", text: currentData.option_b },
+              { key: "C", text: currentData.option_c },
+              { key: "D", text: currentData.option_d },
+              ...(currentData.option_e
+                ? [{ key: "E", text: currentData.option_e }]
+                : []),
+            ].map((option) => (
+              <label
+                key={option.key}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "14px",
+                  marginBottom: "12px",
+                  border:
+                    selectedAnswer === option.key
+                      ? "2px solid #2563eb"
+                      : "1px solid #d1d5db",
+                  borderRadius: "10px",
+                  backgroundColor:
+                    selectedAnswer === option.key
+                      ? "#eff6ff"
+                      : "#ffffff",
+                  cursor: "pointer",
+                }}
+              >
+                <input
+                  type="radio"
+                  name={`q-${currentQuestion}`}
+                  checked={selectedAnswer === option.key}
+                  onChange={() =>
+                        setAnswers({
+                          ...answers,
+                          [currentQuestion]: option.key
+                        })
+                      }
+                />
 
-          <div>
-            <input
-              type="radio"
-              name="q"
-              checked={
-                selectedAnswer === "B"
-              }
-              onChange={() =>
-                setAnswers({
-                  ...answers,
-                  [currentQuestion]: "B",
-                })
-              }
-            />
-            {" "}
-            {
-              currentData.option_b
-            }
-          </div>
+                <strong
+                  style={{
+                    color: "#2563eb",
+                    minWidth: "24px",
+                  }}
+                >
+                  {option.key}.
+                </strong>
 
-          <div>
-            <input
-              type="radio"
-              name="q"
-              checked={
-                selectedAnswer === "C"
-              }
-              onChange={() =>
-                setAnswers({
-                ...answers,
-                [currentQuestion]: "C",
-                })
-              }
-            />
-            {" "}
-            {
-              currentData.option_c
-            }
-          </div>
-
-          <div>
-            <input
-              type="radio"
-              name="q"
-              checked={
-                selectedAnswer === "D"
-              }
-              onChange={() =>
-                setAnswers({
-                  ...answers,
-                  [currentQuestion]: "D",
-                })
-              }
-            />
-            {" "}
-            {
-              currentData.option_d
-            }
-          </div>
-
-          {currentData.option_e && (
-            <div>
-              <input
-                type="radio"
-                name="q"
-                checked={
-                  selectedAnswer === "E"
-                }
-                onChange={() =>
-                  setAnswers({
-                    ...answers,
-                    [currentQuestion]: "E",
-                  })
-                }
-              />
-              {" "}
-              {
-                currentData.option_e
-              }
-            </div>
-          )}
+                <span>
+                  {option.text}
+                </span>
+              </label>
+            ))}
 
           <br />
           <button
