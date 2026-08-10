@@ -36,7 +36,9 @@ export default function ExamSummary() {
     loadExam();
   }, [id]);
 
-  const startExam = () => {
+ const startExam = () => {
+    console.log("START EXAM CLICKED");
+
     if (!userName.trim()) {
       alert("Please enter your name");
       return;
@@ -46,16 +48,6 @@ export default function ExamSummary() {
       alert("Please enter your Email ID");
       return;
     }
-
-    localStorage.setItem(
-      "candidateName",
-      userName
-    );
-
-    localStorage.setItem(
-      "candidateEmail",
-      email
-    );
 
     navigate(`/attempt/${id}`);
   };

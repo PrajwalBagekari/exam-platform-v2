@@ -288,19 +288,21 @@ export default function TakeExam() {
   
 
   const currentData =
-    questions[currentQuestion - 1];
-    console.log(
-      "CURRENT QUESTION INDEX:",
-      currentQuestion - 1
-    );
+   questions?.[currentQuestion - 1];
+
+  if (!currentData) {
+    return <h1>Loading Questions...</h1>;
+  }
+
+  
 
   console.log(
     "CURRENT QUESTION TEXT:",
     currentData?.question
   );
   console.log(
-  "CURRENT TABLE:",
-  currentData.table_data
+    "CURRENT TABLE:",
+    currentData?.table_data
   );
   console.log(
     "CURRENT DESCRIPTION:",
@@ -501,7 +503,7 @@ export default function TakeExam() {
             </p>
           )}
 
-          {currentData.description && (
+          {currentData?.description && (
             <div
               style={{
                 marginTop: "15px",
@@ -538,8 +540,8 @@ export default function TakeExam() {
               />
             </div>
           )}
-          {currentData.table_data &&
-            Array.isArray(currentData.table_data) && (
+          {currentData?.table_data &&
+            Array.isArray(currentData?.table_data) && (
               <table
                 style={{
                   width: "100%",
@@ -548,7 +550,7 @@ export default function TakeExam() {
                 }}
               >
                 <tbody>
-                  {currentData.table_data.map(
+                  {currentData?.table_data.map(
                     (row: any, rowIndex: number) => (
                       <tr key={rowIndex}>
                         {row.map(
