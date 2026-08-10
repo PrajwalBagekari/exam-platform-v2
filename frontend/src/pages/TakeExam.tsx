@@ -68,34 +68,9 @@ export default function TakeExam() {
     questions.length;
 
   useEffect(() => {
+    localStorage.removeItem(`answers_${id}`);
+  }, [id]);
 
-    const savedAnswers =
-      localStorage.getItem(
-        "answers"
-      );
-
-    if (savedAnswers) {
-
-      setAnswers(
-        JSON.parse(
-          savedAnswers
-        )
-      );
-
-    }
-
-  }, []);
-
-  useEffect(() => {
-
-    localStorage.setItem(
-      "answers",
-      JSON.stringify(
-        answers
-      )
-    );
-
-  }, [answers]);
   const calculateScore = () => {
 
         let correct = 0;
@@ -150,12 +125,11 @@ export default function TakeExam() {
         },
         }
     );
-
     };
     useEffect(() => {
 
     localStorage.setItem(
-        "answers",
+        `answers_${id}`,
         JSON.stringify(answers)
     );
 
