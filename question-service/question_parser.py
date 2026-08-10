@@ -145,6 +145,7 @@ def extract_questions(
         "\nDIRECTION GROUPS FOUND:"
     )
 
+
     for group in direction_groups:
 
         print(
@@ -215,6 +216,12 @@ def extract_questions(
 
             group["table_data"] = (
                 usable_tables[table_index]
+            )
+            print(
+                "TABLE ASSIGNED TO GROUP:",
+                group["start"],
+                group["end"],
+                group["table_data"]
             )
 
             table_index += 1
@@ -382,10 +389,39 @@ def extract_questions(
                     "",
                     directions
                 ).strip()
-
-                shared_image_path = (
-                    group["shared_image_path"]
+                print(
+                    "QUESTION",
+                    question_number,
+                    "TABLE RECEIVED:",
+                    table_data
                 )
+
+                image_file = group["shared_image_path"]
+
+                if image_file:
+
+                    matched_image = next(
+                        (
+                            img
+                            for img in images
+                            if os.path.basename(img) == image_file
+                        ),
+                        None
+                    )
+
+                    if matched_image:
+
+                        relative_path = matched_image.replace(
+                            "/app/uploads/",
+                            ""
+                        ).replace(
+                            "\\",
+                            "/"
+                        )
+
+                        shared_image_path = (
+                            f"https://pdf2exam.org/images/{relative_path}"
+                        )
 
                 print(
                     "IMAGE FOUND FOR QUESTION:",
