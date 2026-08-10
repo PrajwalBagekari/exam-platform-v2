@@ -70,6 +70,11 @@ def extract_questions(
     questions = []
 
     direction_groups = []
+    usable_tables = [
+        table
+        for table in tables
+        if len(table.get("rows", [])) > 1
+    ]
 
     direction_matches = (
         DIRECTION_PATTERN.findall(text)
@@ -198,6 +203,25 @@ def extract_questions(
             group["end"],
             group["group_type"]
         )
+    table_index = 0
+
+    for group in direction_groups:
+
+        if (
+            group["group_type"] in
+            ["table", "bar_graph", "pie_chart", "line_graph"]
+            and table_index < len(usable_tables)
+        ):
+
+            group["table_data"] = (
+                usable_tables[table_index]
+            )
+
+            table_index += 1
+
+        else:
+
+            group["table_data"] = None
 
     for block in blocks:
         table_data = None
@@ -349,6 +373,9 @@ def extract_questions(
             ):
 
                 directions = group["directions"]
+                table_data = group.get(
+                        "table_data"
+                    )
 
                 directions = re.sub(
                     r"\[\[IMAGE:.*?\]\]",
@@ -400,23 +427,7 @@ def extract_questions(
             "TABLE DATA:",
             table_data
         )
-        table_data = None
 
-        for group in direction_groups:
-
-            if (
-                question_number is not None
-                and group["start"] <= question_number <= group["end"]
-            ):
-
-                table_data = tables
-                break
-
-        if (
-            question_number == 1
-            and len(tables) > 0
-        ):
-            table_data = tables[0]
         print(
             "QUESTION:",
             question_number,
