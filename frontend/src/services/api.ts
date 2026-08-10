@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://pdf-service:8001"
+  baseURL: "https://pdf2exam.org"
 });
