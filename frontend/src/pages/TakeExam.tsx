@@ -331,6 +331,15 @@ export default function TakeExam() {
     "CURRENT DESCRIPTION:",
     currentData?.description
   );
+  console.log(
+  "IS_CODE:",
+  currentData?.is_code
+);
+
+  console.log(
+    "CURRENT DATA:",
+    currentData
+  );
 
   console.log(
     "CURRENT IMAGE:",
