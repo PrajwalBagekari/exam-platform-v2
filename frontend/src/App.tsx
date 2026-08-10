@@ -2,12 +2,10 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-import ExamDashboard from "./pages/ExamDashboard";
 import ExamSummary from "./pages/ExamSummary";
 import TakeExam from "./pages/TakeExam";
 import Result from "./pages/Result";
 import UploadPDF from "./pages/UploadPDF";
-//import ExamDashboard from "./pages/ExamDashboard";
 
 function App() {
 
