@@ -114,14 +114,21 @@ export default function TakeExam() {
         calculateScore();
 
     navigate(
-        "/result",
-        {
-        state: {
-            score,
-            totalQuestions,
-        },
-        }
-    );
+    "/result",
+    {
+      state: {
+        score,
+        totalQuestions,
+        attempted,
+        skipped,
+        review,
+        notVisited,
+        timeLeft,
+        questions,
+        answers,
+      },
+    }
+  );
     };
 
 

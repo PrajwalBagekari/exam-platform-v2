@@ -10,6 +10,8 @@ export default function Result() {
     skipped = 0,
     notVisited = 0,
     timeLeft = 0,
+    questions = [],
+    answers = {},
     } = location.state || {};
 
     const correct = score;
@@ -19,6 +21,30 @@ export default function Result() {
         attempted - correct,
         0
     );
+    const getOptionText = (
+      question: any,
+      answer?: string
+    ) => {
+      switch (answer?.toUpperCase()) {
+        case "A":
+          return question.option_a;
+
+        case "B":
+          return question.option_b;
+
+        case "C":
+          return question.option_c;
+
+        case "D":
+          return question.option_d;
+
+        case "E":
+          return question.option_e;
+
+        default:
+          return "Not Answered";
+      }
+    };
 
     const unseen =
     notVisited;
@@ -57,7 +83,7 @@ export default function Result() {
       "0 2px 10px rgba(0,0,0,0.1)",
     textAlign: "center" as const,
   };
-
+  
   const renderCard = (
     title: string,
     value: string | number
@@ -261,6 +287,121 @@ export default function Result() {
           `${wastedTime} Min`
         )}
       </div>
+
+      <div
+        style={{
+          marginTop: "50px",
+          background: "#ffffff",
+          padding: "20px",
+          borderRadius: "12px",
+          boxShadow:
+            "0 2px 10px rgba(0,0,0,0.1)",
+        }}
+      >
+        <h1>
+          📝 Question Review
+        </h1>
+
+        {questions.map(
+          (
+            question: any,
+            index: number
+          ) => {
+
+            const questionNumber =
+              index + 1;
+
+            const selectedAnswer =
+              answers[questionNumber];
+
+            const isCorrect =
+              selectedAnswer?.toLowerCase() ===
+              question.correct_answer?.toLowerCase();
+
+            return (
+              <div
+                key={question.id}
+                style={{
+                  border:
+                    "1px solid #e5e7eb",
+                  borderRadius: "12px",
+                  padding: "16px",
+                  marginBottom: "16px",
+                  backgroundColor:
+                    "#ffffff",
+                }}
+              >
+                <h3>
+                  Question {questionNumber}
+                </h3>
+
+                <p>
+                  {question.question}
+                </p>
+
+                <div
+                  style={{
+                    marginTop: "12px",
+                    padding: "10px",
+                    background: "#f8fafc",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <strong>
+                    Your Answer:
+                  </strong>
+
+                  <br />
+
+                  {selectedAnswer
+                    ? `${selectedAnswer}. ${getOptionText(
+                        question,
+                        selectedAnswer
+                      )}`
+                    : "Not Answered"}
+                </div>
+
+                <div
+                  style={{
+                    marginTop: "12px",
+                    padding: "10px",
+                    background: "#f8fafc",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <strong>
+                    Correct Answer:
+                  </strong>
+
+                  <br />
+
+                  {question.correct_answer?.toUpperCase()}
+                  {". "}
+                  {getOptionText(
+                    question,
+                    question.correct_answer
+                  )}
+                </div>
+
+                <div
+                  style={{
+                    marginTop: "12px",
+                    fontWeight: "bold",
+                    color: isCorrect
+                      ? "#16a34a"
+                      : "#dc2626",
+                  }}
+                >
+                  {isCorrect
+                    ? "✅ Correct"
+                    : "❌ Incorrect"}
+                </div>
+              </div>
+            );
+          }
+        )}
+      </div>
     </div>
+    
   );
 }
