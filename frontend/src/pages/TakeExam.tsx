@@ -123,14 +123,7 @@ export default function TakeExam() {
         }
     );
     };
-    useEffect(() => {
 
-    localStorage.setItem(
-        `answers_${id}`,
-        JSON.stringify(answers)
-    );
-
-    }, [answers]);
 
   useEffect(() => {
 
