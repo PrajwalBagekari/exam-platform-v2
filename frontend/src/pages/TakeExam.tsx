@@ -282,6 +282,29 @@ export default function TakeExam() {
     totalQuestions,
     examSubmitted
     ]);
+  
+  if (loading) {
+    return (
+      <h1>
+        Loading Questions...
+      </h1>
+    );
+  }
+
+  if (!questions.length) {
+    console.log(
+      "FIRST 10 QUESTIONS",
+      questions.slice(0, 10).map(
+        q => q.question
+      )
+    );
+    
+    return (
+      <h1>
+        No Questions Found
+      </h1>
+    );
+  }
     
 
   
@@ -387,28 +410,6 @@ export default function TakeExam() {
     skipped -
     review;
 
-  if (loading) {
-    return (
-      <h1>
-        Loading Questions...
-      </h1>
-    );
-  }
-
-  if (!questions.length) {
-    console.log(
-      "FIRST 10 QUESTIONS",
-      questions.slice(0, 10).map(
-        q => q.question
-      )
-    );
-    
-    return (
-      <h1>
-        No Questions Found
-      </h1>
-    );
-  }
   const previousQuestion = () => {
 
     if (currentQuestion > 1) {
@@ -517,15 +518,6 @@ export default function TakeExam() {
               {currentData.description}
             </div>
           )}
-          console.log(
-              "IMAGE PATH RAW:",
-              currentData?.image_path
-            );
-
-          console.log(
-              "IMAGE SRC:",
-              currentData?.image_path
-            );
 
           {currentData.image_path && (
             <div style={{ marginTop: "15px" }}>
