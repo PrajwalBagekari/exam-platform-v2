@@ -67,9 +67,6 @@ export default function TakeExam() {
   const totalQuestions =
     questions.length;
 
-  useEffect(() => {
-    localStorage.removeItem(`answers_${id}`);
-  }, [id]);
 
   const calculateScore = () => {
 
