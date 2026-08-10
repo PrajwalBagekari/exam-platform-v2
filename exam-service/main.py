@@ -126,6 +126,7 @@ def get_exam_questions(
             "id": q.id,
             "question": q.question_text,
             "description": q.directions,
+            "is_code": q.is_code,
             "shared_image_path": q.shared_image_path,
             "table_data": q.table_data,
             "option_a": q.option_a,
