@@ -217,6 +217,19 @@ def extract_questions(
             group["table_data"] = (
                 usable_tables[table_index]
             )
+            print("USABLE TABLES:")
+            print(usable_tables)
+
+            print("USABLE TABLE COUNT:")
+            print(len(usable_tables))
+            print(
+            "TABLE ASSIGNED TO GROUP:",
+            group["start"],
+            group["end"],
+            group["group_type"]
+            )
+
+            print(group["table_data"])
             print(
                 "TABLE ASSIGNED TO GROUP:",
                 group["start"],
@@ -419,9 +432,7 @@ def extract_questions(
                             "/"
                         )
 
-                        shared_image_path = (
-                            f"https://pdf2exam.org/images/{relative_path}"
-                        )
+                        shared_image_path = f"https://pdf2exam.org:/images/{relative_path}"
 
                 print(
                     "IMAGE FOUND FOR QUESTION:",
