@@ -3,6 +3,7 @@ import {
   Route
 } from "react-router-dom";
 import ExamDashboard from "./pages/ExamDashboard";
+import ExamSummary from "./pages/ExamSummary";
 import TakeExam from "./pages/TakeExam";
 import Result from "./pages/Result";
 import UploadPDF from "./pages/UploadPDF";
@@ -21,7 +22,7 @@ function App() {
 
   <Route
     path="/exam/:id"
-    element={<ExamDashboard />}
+    element={<ExamSummary />}
   />
 
   <Route
