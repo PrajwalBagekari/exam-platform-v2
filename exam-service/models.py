@@ -14,7 +14,7 @@ class QuestionSchema(BaseModel):
     shared_image_path: str | None = None
     image_path: str | None = None
     table_data: str | None = None
-
+    is_code: bool = False
 from database import Base
 
 
@@ -76,6 +76,10 @@ class Question(Base):
     directions = Column(
         Text,
         nullable=True
+    )
+    is_code = Column(
+        Boolean,
+        default=False
     )
 
     shared_image_path = Column(

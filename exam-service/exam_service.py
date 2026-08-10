@@ -64,7 +64,7 @@ class ExamService:
                         directions=q.get(
                         "description"
                     ),
-                    is_code=question.get(
+                    is_code=q.get(
                         "is_code",
                         False
                     ),
