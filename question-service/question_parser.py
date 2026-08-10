@@ -421,8 +421,11 @@ def extract_questions(
             "QUESTION:",
             question_number,
             "TABLE:",
-            table_data
+            table_data,
+            "IS_CODE:",
+            is_code
         )
+
 
         questions.append(
             {
