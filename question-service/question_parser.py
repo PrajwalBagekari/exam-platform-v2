@@ -222,6 +222,11 @@ def extract_questions(
 
             print("USABLE TABLE COUNT:")
             print(len(usable_tables))
+            usable_tables = [
+                table
+                for table in tables
+                if len(table.get("rows", [])) > 1
+            ]
             print(
             "TABLE ASSIGNED TO GROUP:",
             group["start"],
@@ -229,13 +234,13 @@ def extract_questions(
             group["group_type"]
             )
 
-            print(group["table_data"])
+            
             print(
                 "TABLE ASSIGNED TO GROUP:",
                 group["start"],
                 group["end"],
-                group["table_data"]
             )
+            print(group["table_data"])
 
             table_index += 1
 
