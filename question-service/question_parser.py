@@ -70,11 +70,7 @@ def extract_questions(
     questions = []
 
     direction_groups = []
-    usable_tables = [
-        table
-        for table in tables
-        if len(table.get("rows", [])) > 1
-    ]
+
 
     direction_matches = (
         DIRECTION_PATTERN.findall(text)
@@ -215,6 +211,10 @@ def extract_questions(
             })
     print("USABLE TABLES:")
     print(usable_tables)
+    group["table_data"] = usable_tables[table_index]
+
+    print("TABLE TYPE:", type(group["table_data"]))
+    print("TABLE VALUE:", repr(group["table_data"]))
 
     print("USABLE TABLE COUNT:")
     print(len(usable_tables))
@@ -229,6 +229,10 @@ def extract_questions(
         ):
 
             table = usable_tables[table_index]
+            group["table_data"] = usable_tables[table_index]
+
+            print("TABLE TYPE:", type(group["table_data"]))
+            print("TABLE VALUE:", repr(group["table_data"]))
 
             if isinstance(table, dict):
                 group["table_data"] = table.get("rows")

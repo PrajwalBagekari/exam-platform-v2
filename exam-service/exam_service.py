@@ -83,11 +83,11 @@ class ExamService:
                         "image_path",
                     ),
                     
-
-                    table_data = q.get("table_data")
-
-                    if table_data is not None:
-                        table_data = json.dumps(table_data)
+                    table_data=(
+                        json.loads(q.table_data)
+                        if q.table_data
+                        else None
+                    ),
 
                     option_a=(
                         options[0]
