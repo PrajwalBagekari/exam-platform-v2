@@ -204,11 +204,20 @@ def extract_questions(
             group["end"],
             group["group_type"]
         )
-    usable_tables = [
-                    table
-                    for table in tables
-                    if len(table.get("rows", [])) > 1
-                ]
+    usable_tables = []
+
+    for table in tables:
+        rows = table.get("rows", [])
+
+        if rows:
+            usable_tables.append({
+                "rows": rows
+            })
+    print("USABLE TABLES:")
+    print(usable_tables)
+
+    print("USABLE TABLE COUNT:")
+    print(len(usable_tables))
     table_index = 0
 
     for group in direction_groups:
@@ -219,9 +228,12 @@ def extract_questions(
             and table_index < len(usable_tables)
         ):
 
-            group["table_data"] = (
-                usable_tables[table_index]
-            )
+            table = usable_tables[table_index]
+
+            if isinstance(table, dict):
+                group["table_data"] = table.get("rows")
+            else:
+                group["table_data"] = table
             print("USABLE TABLES:")
             print(usable_tables)
 
@@ -399,9 +411,10 @@ def extract_questions(
             ):
 
                 directions = group["directions"]
-                table_data = group.get(
-                        "table_data"
-                    )
+                table_data = group.get("table_data")
+
+                if not table_data:
+                    table_data = None
 
                 directions = re.sub(
                     r"\[\[IMAGE:.*?\]\]",

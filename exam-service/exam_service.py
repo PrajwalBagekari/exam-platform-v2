@@ -1,4 +1,4 @@
-
+import json
 from database import (
     SessionLocal
 )
@@ -82,10 +82,12 @@ class ExamService:
                     image_path=q.get(
                         "image_path",
                     ),
-                    table_data=q.get(
-                        "table_data",
-                        []
-                    ),
+                    
+
+                    table_data = q.get("table_data")
+
+                    if table_data is not None:
+                        table_data = json.dumps(table_data)
 
                     option_a=(
                         options[0]
