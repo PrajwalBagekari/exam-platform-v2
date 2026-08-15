@@ -362,7 +362,7 @@ def extract_questions(
 
             image_file = image_matches[0].strip()
 
-            shared_image_path = next(
+            matched_image = next(
                 (
                     img
                     for img in images
@@ -371,35 +371,36 @@ def extract_questions(
                 None
             )
 
-            if shared_image_path:
+            print("IMAGE FILE:", image_file)
+            print("MATCHED IMAGE:", matched_image)
 
-                relative_path = shared_image_path.replace(
+            if matched_image:
+
+                relative_path = matched_image.replace(
                     "/app/uploads/",
                     ""
-                )
-
-                relative_path = relative_path.replace(
+                ).replace(
                     "\\",
                     "/"
                 )
 
-                shared_image_path = f"https://pdf2exam.org:/images/{relative_path}"
+                shared_image_path = (
+                    f"https://pdf2exam.org/images/{relative_path}"
+                )
 
                 print(
                     "FINAL IMAGE URL:",
-                    repr(shared_image_path)
+                    shared_image_path
                 )
-        group_type = None
-        if question_number_match:
 
-            question_number = int(
-                question_number_match.group(1)
-            )
-        print(
-            "AUTO IMAGE:",
-            question_number,
-            shared_image_path
-        )
+            else:
+
+                shared_image_path = image_file
+
+                print(
+                    "IMAGE NOT FOUND, USING:",
+                    shared_image_path
+                )
        
 
         print("\nDIRECTION GROUPS FOUND:")
@@ -445,6 +446,7 @@ def extract_questions(
                         ),
                         None
                     )
+                    print("MATCHED IMAGE:", matched_image)
 
                     if matched_image:
 
