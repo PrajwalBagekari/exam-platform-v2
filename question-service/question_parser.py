@@ -455,8 +455,10 @@ def extract_questions(
                             "/"
                         )
 
-                        shared_image_path = f"https://pdf2exam.org:/images/{relative_path}"
+                        shared_image_path = f"https://pdf2exam.org/images/{relative_path}"
 
+                        if directions and image_file not in directions:
+                            directions += f"\n[[IMAGE:{image_file}]]"
                 print(
                     "IMAGE FOUND FOR QUESTION:",
                     question_number,

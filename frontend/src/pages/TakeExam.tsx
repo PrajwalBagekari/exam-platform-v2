@@ -547,15 +547,38 @@ export default function TakeExam() {
               }
             </div>
           )}
-          <div>
-            {imageFiles.map((img) => (
-              <div key={img}>
-                {img}
-              </div>
-            ))}
-          </div>
-          
+            {imageFiles.length > 0 && (
+            <div
+              style={{
+                marginTop: "10px",
+                padding: "10px",
+                background: "#eef2ff",
+                borderRadius: "6px",
+              }}
+            >
+              <strong>Associated Images:</strong>
 
+              {imageFiles.map((img, index) => (
+                <div key={index}>
+                  {img}
+                </div>
+              ))}
+            </div>
+          )}
+          {currentData.image_path && (
+            <div
+              style={{
+                marginTop: "15px",
+                color: "red",
+                fontWeight: "bold",
+              }}
+            >
+              Image File: {currentData.image_path}
+            </div>
+          )}
+
+          
+        {/*
           {currentData.image_path && (
             <div style={{ marginTop: "15px" }}>
               <img
@@ -568,7 +591,7 @@ export default function TakeExam() {
                 }}
               />
             </div>
-          )}
+          )}*/}
           
           {parsedTableData &&
             Array.isArray(parsedTableData) && (
