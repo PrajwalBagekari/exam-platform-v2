@@ -264,7 +264,17 @@ export default function TakeExam() {
   
   const currentData =
    questions?.[currentQuestion - 1];
+  const descriptionImages =
+    currentData?.description?.match(
+      /\[\[IMAGE:(.*?)\]\]/g
+    ) || [];
 
+  const imageFiles =
+    descriptionImages.map(
+      (img) =>
+        img.replace("[[IMAGE:", "")
+          .replace("]]", "")
+    );
 
   if (!currentData) {
     return <h1>Loading Questions...</h1>;
@@ -537,6 +547,13 @@ export default function TakeExam() {
               }
             </div>
           )}
+          <div>
+            {imageFiles.map((img) => (
+              <div key={img}>
+                {img}
+              </div>
+            ))}
+          </div>
           
 
           {currentData.image_path && (
