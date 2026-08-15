@@ -420,11 +420,7 @@ def extract_questions(
                 if not table_data:
                     table_data = None
 
-                directions = re.sub(
-                    r"\[\[IMAGE:.*?\]\]",
-                    "",
-                    directions
-                ).strip()
+                directions = directions.strip()
                 print(
                     "QUESTION",
                     question_number,
@@ -458,13 +454,6 @@ def extract_questions(
                         shared_image_path = (
                             f"https://pdf2exam.org/images/{relative_path}"
                         )
-
-                        directions += (
-                            f"\n[[FULL_IMAGE:{shared_image_path}]]"
-                        )
-
-                        if directions and image_file not in directions:
-                            directions += f"\n[[IMAGE:{image_file}]]"
                 print(
                     "IMAGE FOUND FOR QUESTION:",
                     question_number,
@@ -529,10 +518,7 @@ def extract_questions(
                 "description":
                 directions,
 
-                "image_path":
-                str(shared_image_path)
-                if shared_image_path
-                else None,
+                
 
                 "table_data":
                 table_data,
@@ -544,7 +530,12 @@ def extract_questions(
                 answer,
 
                 "group_type":
-                group_type
+                group_type,
+
+                "image_path":
+                                str(shared_image_path)
+                                if shared_image_path
+                                else None,
 
             }
             
