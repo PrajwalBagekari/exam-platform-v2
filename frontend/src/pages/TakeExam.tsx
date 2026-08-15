@@ -261,6 +261,32 @@ export default function TakeExam() {
       </h1>
     );
   }
+  
+  const currentData =
+   questions?.[currentQuestion - 1];
+
+  if (!currentData) {
+    return <h1>Loading Questions...</h1>;
+  }
+
+  let parsedTableData = currentData?.table_data;
+
+  if (typeof parsedTableData === "string") {
+    try {
+      parsedTableData = JSON.parse(parsedTableData);
+    } catch (e) {
+      console.error(
+        "TABLE PARSE ERROR:",
+        e
+      );
+      parsedTableData = null;
+    }
+  }
+
+  console.log(
+    "PARSED TABLE DATA:",
+    parsedTableData
+  );
 
   if (!questions.length) {
     console.log(
@@ -281,13 +307,6 @@ export default function TakeExam() {
   
   
 
-  const currentData =
-   questions?.[currentQuestion - 1];
-
-  if (!currentData) {
-    return <h1>Loading Questions...</h1>;
-  }
-
   
 
   console.log(
@@ -297,6 +316,20 @@ export default function TakeExam() {
   console.log(
     "CURRENT TABLE:",
     currentData?.table_data
+  );
+  console.log(
+    "TABLE TYPE:",
+    typeof currentData?.table_data
+  );
+
+  console.log(
+    "TABLE VALUE:",
+    currentData?.table_data
+  );
+
+  console.log(
+    "PARSED TABLE:",
+    parsedTableData
   );
   console.log(
     "CURRENT DESCRIPTION:",
@@ -512,8 +545,9 @@ export default function TakeExam() {
               />
             </div>
           )}
-          {currentData?.table_data &&
-            Array.isArray(currentData?.table_data) && (
+          
+          {parsedTableData &&
+            Array.isArray(parsedTableData) && (
               <table
                 style={{
                   width: "100%",
@@ -522,7 +556,7 @@ export default function TakeExam() {
                 }}
               >
                 <tbody>
-                  {currentData?.table_data.map(
+                  {parsedTableData.map(
                     (row: any, rowIndex: number) => (
                       <tr key={rowIndex}>
                         {row.map(
