@@ -446,13 +446,20 @@ def extract_questions(
                         relative_path = matched_image.replace(
                             "/app/uploads/",
                             ""
-                        ).replace(
+                        )
+
+                        relative_path = relative_path.replace(
                             "\\",
                             "/"
                         )
 
                         shared_image_path = (
                             f"https://pdf2exam.org/images/{relative_path}"
+                        )
+
+                        print(
+                            "GROUP IMAGE URL:",
+                            shared_image_path
                         )
                 print(
                     "IMAGE FOUND FOR QUESTION:",
