@@ -209,15 +209,8 @@ def extract_questions(
             usable_tables.append({
                 "rows": rows
             })
-    print("USABLE TABLES:")
-    print(usable_tables)
-    group["table_data"] = usable_tables[table_index]
 
-    print("TABLE TYPE:", type(group["table_data"]))
-    print("TABLE VALUE:", repr(group["table_data"]))
 
-    print("USABLE TABLE COUNT:")
-    print(len(usable_tables))
     table_index = 0
 
     for group in direction_groups:
