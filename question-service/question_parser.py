@@ -431,6 +431,11 @@ def extract_questions(
                 image_file = group["shared_image_path"]
 
                 if image_file:
+                    print("GROUP IMAGE FILE:", image_file)
+
+                    print("AVAILABLE IMAGES:")
+                    for img in images:
+                        print(" ->", os.path.basename(img))
 
                     matched_image = next(
                         (
