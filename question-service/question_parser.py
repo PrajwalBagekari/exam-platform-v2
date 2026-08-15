@@ -455,7 +455,13 @@ def extract_questions(
                             "/"
                         )
 
-                        shared_image_path = f"https://pdf2exam.org/images/{relative_path}"
+                        shared_image_path = (
+                            f"https://pdf2exam.org/images/{relative_path}"
+                        )
+
+                        directions += (
+                            f"\n[[FULL_IMAGE:{shared_image_path}]]"
+                        )
 
                         if directions and image_file not in directions:
                             directions += f"\n[[IMAGE:{image_file}]]"
