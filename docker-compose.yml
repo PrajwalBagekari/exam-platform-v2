@@ -37,7 +37,8 @@ services:
       - uploads:/app/uploads
 
   question-service:
-    image: prajwalbagekari/question-service:latest
+    build:
+      context: ./question-service
     ports:
       - "8002:8002"
 
