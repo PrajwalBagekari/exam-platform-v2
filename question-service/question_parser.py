@@ -70,6 +70,7 @@ def extract_questions(
     questions = []
 
     direction_groups = []
+    
 
 
     direction_matches = (
@@ -82,8 +83,8 @@ def extract_questions(
         directions_text
     ) in direction_matches:
 
+        
         group_type = None
-
         direction_lower = (
             directions_text.lower()
         )
@@ -222,34 +223,19 @@ def extract_questions(
         ):
 
             table = usable_tables[table_index]
-            group["table_data"] = usable_tables[table_index]
 
-            print("TABLE TYPE:", type(group["table_data"]))
-            print("TABLE VALUE:", repr(group["table_data"]))
-
-            if isinstance(table, dict):
-                group["table_data"] = table.get("rows")
-            else:
-                group["table_data"] = table
+            group["table_data"] = (
+                table.get("rows")
+                if isinstance(table, dict)
+                else table
+            )
             print("USABLE TABLES:")
             print(usable_tables)
 
             print("USABLE TABLE COUNT:")
             print(len(usable_tables))
-            
-            print(
-            "TABLE ASSIGNED TO GROUP:",
-            group["start"],
-            group["end"],
-            group["group_type"]
-            )
 
-            
-            print(
-                "TABLE ASSIGNED TO GROUP:",
-                group["start"],
-                group["end"],
-            )
+        
             print(group["table_data"])
 
             table_index += 1
@@ -257,6 +243,7 @@ def extract_questions(
         else:
 
             group["table_data"] = None
+    is_code = False
 
     for block in blocks:
         table_data = None
@@ -336,11 +323,15 @@ def extract_questions(
                 r"Q(\d+)\.",
                 question_text
             )
+        if question_number_match:
+            question_number = int(
+                question_number_match.group(1)
+            )
         directions = None
-
+        
         shared_image_path = None
         table_data = None
-
+        
         image_matches = re.findall(
             r"\[\[IMAGE:(.*?)\]\]",
             block
