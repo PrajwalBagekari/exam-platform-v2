@@ -265,6 +265,7 @@ export default function TakeExam() {
   const currentData =
    questions?.[currentQuestion - 1];
 
+
   if (!currentData) {
     return <h1>Loading Questions...</h1>;
   }
@@ -528,9 +529,15 @@ export default function TakeExam() {
                 lineHeight: "1.6",
               }}
             >
-              {currentData.description}
+              {
+                currentData.description.replace(
+                  /\[\[IMAGE:.*?\]\]/g,
+                  ""
+                )
+              }
             </div>
           )}
+          
 
           {currentData.image_path && (
             <div style={{ marginTop: "15px" }}>
