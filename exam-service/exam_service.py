@@ -85,7 +85,7 @@ class ExamService:
                     
                     table_data=(
                         json.loads(q.table_data)
-                        if q.table_data
+                        if q.get("table_data")
                         else None
                     ),
 

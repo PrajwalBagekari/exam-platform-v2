@@ -4,9 +4,7 @@ from pathlib import Path
 import zipfile
 import os
 
-
 def process_pdf(pdf_path):
-
     pdf_path = Path(pdf_path)
 
     docx_path = pdf_path.with_suffix(".docx")
@@ -18,7 +16,6 @@ def process_pdf(pdf_path):
     doc = Document(str(docx_path))
 
     for section in doc.sections:
-
         header = section.header
         footer = section.footer
 
@@ -35,12 +32,11 @@ def process_pdf(pdf_path):
     doc = Document(str(docx_path))
 
     for para in doc.paragraphs:
-
         text = para.text.strip()
 
         if text:
             extracted_text.append(text)
-
+    extracted_tables = extract_tables(docx_path)
     image_dir = str(docx_path).replace(
         ".docx",
         "_images"
@@ -54,7 +50,6 @@ def process_pdf(pdf_path):
     image_paths = []
 
     try:
-
         with zipfile.ZipFile(
             str(docx_path),
             "r"
@@ -103,9 +98,14 @@ def process_pdf(pdf_path):
     print("IMAGES EXTRACTED:")
     print(image_paths)
 
+    # Make sure extracted_tables is created before return
+    # Example:
+    # extracted_tables = extract_tables_from_docx(docx_path)
+
     return {
         "pdf_file": str(pdf_path),
         "docx_file": str(docx_path),
         "text": "\n".join(extracted_text),
-        "images": image_paths
+        "images": image_paths,
+        "tables": extracted_tables
     }
