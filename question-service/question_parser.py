@@ -372,8 +372,8 @@ def extract_questions(
                 )
 
                 question_image_path = (
-                    f"https://pdf2exam.org/images/{relative_path}"
-                )
+                        f"https://pdf2exam.org/images/{relative_path}"
+                    )
 
                 print(
                     "QUESTION IMAGE URL:",
@@ -450,8 +450,8 @@ def extract_questions(
                         )
 
                         group_image_path = (
-                            f"https://pdf2exam.org/images/{relative_path}"
-                        )
+                                f"https://pdf2exam.org/images/{relative_path}"
+                            )
 
                         print(
                             "GROUP IMAGE URL:",
@@ -514,9 +514,12 @@ def extract_questions(
             is_code
         )
         final_image_path = (
-            question_image_path
-            if question_image_path
-            else group_image_path
+                question_image_path
+                or group_image_path
+            )
+        print(
+            "FINAL IMAGE SELECTED:",
+            final_image_path
         )
 
 
@@ -548,9 +551,10 @@ def extract_questions(
                 group_type,
 
                 "image_path":
-                    str(final_image_path)
-                    if final_image_path
-                    else None,
+                final_image_path,
+
+                "shared_image_path":
+                group_image_path,
 
             }
             
