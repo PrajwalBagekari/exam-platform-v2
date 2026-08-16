@@ -3,6 +3,7 @@ from docx import Document
 from docx.oxml.ns import qn
 import os
 import zipfile
+import re
 from uuid import uuid4
 
 
@@ -16,12 +17,15 @@ class PDFProcessor:
         )
 
         cv = Converter(pdf_path)
-
         cv.convert(docx_path)
-
         cv.close()
 
         doc = Document(docx_path)
+
+        # =====================================================
+        # TABLE EXTRACTION
+        # =====================================================
+
         extracted_tables = []
 
         print("\nTABLES FOUND:")
@@ -55,11 +59,13 @@ class PDFProcessor:
         print("\nEXTRACTED TABLES:")
         print(extracted_tables)
 
+        # =====================================================
+        # IMAGE RELATIONSHIP BUILDING
+        # =====================================================
 
         print("\nBUILDING IMAGE MAPPINGS\n")
 
         rid_to_image = {}
-
         occurrence_to_image = {}
 
         with zipfile.ZipFile(
@@ -149,6 +155,10 @@ class PDFProcessor:
             occurrence_counter
         )
 
+        # =====================================================
+        # REMOVE HEADER / FOOTER
+        # =====================================================
+
         for section in doc.sections:
 
             for p in section.header.paragraphs:
@@ -158,6 +168,10 @@ class PDFProcessor:
                 p.text = ""
 
         doc.save(docx_path)
+
+        # =====================================================
+        # DEBUG DOCX CONTENT
+        # =====================================================
 
         print("\n========================")
         print("DOCX INTERNAL FILES")
@@ -177,6 +191,10 @@ class PDFProcessor:
                     or "embeddings" in name.lower()
                 ):
                     print(name)
+
+        # =====================================================
+        # IMAGE EXTRACTION
+        # =====================================================
 
         image_dir = docx_path.replace(
             ".docx",
@@ -249,6 +267,10 @@ class PDFProcessor:
         for img in image_paths:
             print(img)
 
+        # =====================================================
+        # TEXT + IMAGE PLACEHOLDERS
+        # =====================================================
+
         text_lines = []
 
         image_counter = 0
@@ -311,9 +333,105 @@ class PDFProcessor:
             cleaned_text[:5000]
         )
 
+        # =====================================================
+        # QUESTION -> IMAGE MAPPING
+        # (DOES NOT TOUCH GROUP LOGIC)
+        # =====================================================
+
+        question_images = {}
+
+        pending_images = []
+
+        current_question = None
+
+        for line in text_lines:
+
+            line = line.strip()
+
+            if not line:
+                continue
+
+            if line.startswith("[[IMAGE:"):
+
+                image_name = (
+                    line.replace(
+                        "[[IMAGE:",
+                        ""
+                    )
+                    .replace(
+                        "]]",
+                        ""
+                    )
+                    .strip()
+                )
+
+                pending_images.append(
+                    image_name
+                )
+
+                continue
+
+            q_match = re.match(
+                r"Q\s*(\d+)\.",
+                line,
+                re.IGNORECASE
+            )
+
+            if q_match:
+
+                question_number = int(
+                    q_match.group(1)
+                )
+
+                current_question = (
+                    question_number
+                )
+
+                if (
+                    question_number
+                    not in question_images
+                ):
+                    question_images[
+                        question_number
+                    ] = []
+
+                if pending_images:
+
+                    question_images[
+                        question_number
+                    ].extend(
+                        pending_images
+                    )
+
+                    pending_images.clear()
+
+        print("\nQUESTION IMAGE MAP")
+        print(question_images)
+
+        # =====================================================
+        # QUESTION -> TABLE MAPPING
+        # (STORED ONLY, NO GROUP LOGIC CHANGES)
+        # =====================================================
+
+        question_tables = {}
+
+        for table in extracted_tables:
+
+            question_tables[
+                table["table_index"]
+            ] = table
+
+        # =====================================================
+        # RETURN EVERYTHING
+        # =====================================================
+
         return {
             "docx": docx_path,
             "text": cleaned_text,
             "images": image_paths,
-            "tables": extracted_tables
+            "tables": extracted_tables,
+            "question_images": question_images,
+            "question_tables": question_tables,
+            "rid_to_image": rid_to_image,
+            "occurrence_to_image": occurrence_to_image
         }
