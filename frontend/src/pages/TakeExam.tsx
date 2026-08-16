@@ -566,16 +566,11 @@ export default function TakeExam() {
             </div>
           )}
           {currentData.image_path && (
-            <div
-              style={{
-                marginTop: "15px",
-                color: "red",
-                fontWeight: "bold",
-              }}
-            >
-              Image File: {currentData.image_path}
+            <div style={{ marginTop: "15px" }}>
+              {currentData.image_path}
             </div>
           )}
+
 
           
         {/*
