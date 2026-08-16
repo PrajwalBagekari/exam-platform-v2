@@ -63,6 +63,9 @@ def extract_questions(
 
     if tables is None:
         tables = []
+    print("\n=== TABLES RECEIVED ===")
+    print(tables)
+    print("COUNT:", len(tables))
 
 
 
@@ -246,6 +249,7 @@ def extract_questions(
         )
 
         print(group["table_data"])
+        
 
         table_index += 1
     is_code = False
