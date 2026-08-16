@@ -566,14 +566,14 @@ export default function TakeExam() {
             </div>
           )}
           {currentData.image_path && (
-            <div style={{ marginTop: "15px" }}>
-              {currentData.image_path}
-            </div>
-          )}
+          <div style={{ marginTop: "15px" }}>
+            {currentData.image_path}
+          </div>
+        )}
 
 
           
-        {/*
+        
           {currentData.image_path && (
             <div style={{ marginTop: "15px" }}>
               <img
@@ -586,7 +586,7 @@ export default function TakeExam() {
                 }}
               />
             </div>
-          )}*/}
+          )}
           
           {parsedTableData &&
             Array.isArray(parsedTableData) && (
