@@ -389,6 +389,9 @@ def extract_questions(
 
         print("\nDIRECTION GROUPS FOUND:")
         group_type = None
+        directions = None
+        table_data = None
+        shared_image_path = None
 
         for group in direction_groups:
 
