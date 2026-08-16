@@ -3,6 +3,25 @@ from docx import Document
 from pathlib import Path
 import zipfile
 import os
+def extract_tables(docx_path):
+    doc = Document(str(docx_path))
+
+    tables = []
+
+    for table_index, table in enumerate(doc.tables):
+        rows = []
+
+        for row in table.rows:
+            rows.append(
+                [cell.text.strip() for cell in row.cells]
+            )
+
+        tables.append({
+            "table_index": table_index,
+            "rows": rows
+        })
+
+    return tables
 
 def process_pdf(pdf_path):
     pdf_path = Path(pdf_path)

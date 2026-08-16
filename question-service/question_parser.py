@@ -107,6 +107,8 @@ def extract_questions(
         elif "bar graph" in direction_lower:
 
             group_type = "bar_graph"
+  
+
 
         image_path = re.search(
             r"image_[^\]\s]+",
@@ -536,6 +538,22 @@ def extract_questions(
             "FINAL IMAGES:",
             all_images
         )
+        if (
+            table_data is None
+            and question_number == 1
+            and usable_tables
+        ):
+            table_data = usable_tables[0]["rows"]
+        if question_number == 1:
+            print("\n====================")
+            print("Q1 TABLE ATTACHED")
+            print(table_data)
+            print("====================")
+        print(
+            f"QUESTION {question_number} FINAL TABLE:"
+        )
+
+        print(table_data)
 
 
         questions.append(
