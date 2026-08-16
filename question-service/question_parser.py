@@ -192,6 +192,10 @@ def extract_questions(
 
     if tables:
         print("FIRST TABLE:", tables[0])
+    print("\nRAW TABLES:")
+    for i, table in enumerate(tables):
+        print(f"TABLE {i}:")
+        print(table)
 
 
 
