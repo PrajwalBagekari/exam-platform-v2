@@ -544,57 +544,40 @@ def extract_questions(
             and usable_tables
         ):
             table_data = usable_tables[0]["rows"]
+            if (
+                table_data is None
+                and question_number == 1
+                and usable_tables
+            ):
+                table_data = usable_tables[0]["rows"]
+    
+                print("\nQ1 FALLBACK TABLE ATTACHED")
+                print(table_data)
+        question_obj = {
+            "section": "General",
+            "question": question_text,
+            "is_code": is_code,
+            "description": directions,
+            "table_data": table_data,
+            "options": options,
+            "correct_answer": answer,
+            "group_type": group_type,
+            "image_paths": all_images,
+            "image_path": (
+                all_images[0]
+                if all_images
+                else None
+            ),
+        }
+
         if question_number == 1:
             print("\n====================")
-            print("Q1 TABLE ATTACHED")
-            print(table_data)
+            print("Q1 FINAL OBJECT")
+            print(question_obj)
             print("====================")
-        print(
-            f"QUESTION {question_number} FINAL TABLE:"
-        )
 
-        print(table_data)
-
-
-        questions.append(
-            {
-                "section": "General",
-
-                "question":
-                question_text,
-
-                "is_code": 
-                is_code,
-
-                "description":
-                directions,
-
-                
-
-                "table_data":
-                table_data,
-
-                "options":
-                options,
-
-                "correct_answer":
-                answer,
-
-                "group_type":
-                group_type,
-
-                "image_paths":
-                    all_images,
-
-                "image_path":
-                    all_images[0]
-                    if all_images
-                    else None,
-
-            }
-            
-            
-        )
+        questions.append(question_obj)
+        
 
     print(
         "\n================================"
