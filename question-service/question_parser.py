@@ -130,7 +130,7 @@ def extract_questions(
                 "directions":
                 directions_text.strip(),
 
-                "shared_image_path":
+                "group_image_file":
                 image_path.group(0) if image_path else None,
 
                 "group_type":
@@ -249,7 +249,8 @@ def extract_questions(
         group_type = None
         directions = None
         table_data = None
-        shared_image_path = None
+        question_image_path = None
+        group_image_path = None
 
         question_match = re.search(
 
@@ -332,8 +333,6 @@ def extract_questions(
                 question_number_match.group(1)
             )
         directions = None
-        
-        shared_image_path = None
         table_data = None
         
         image_matches = re.findall(
@@ -372,22 +371,23 @@ def extract_questions(
                     "/"
                 )
 
-                shared_image_path = (
+                question_image_path = (
                     f"https://pdf2exam.org/images/{relative_path}"
                 )
 
                 print(
-                    "FINAL IMAGE URL:",
-                    shared_image_path
+                    "QUESTION IMAGE URL:",
+                    question_image_path
                 )
+
 
             else:
 
-                shared_image_path = image_file
+                question_image_path = image_file
 
                 print(
                     "IMAGE NOT FOUND, USING:",
-                    shared_image_path
+                    question_image_path
                 )
        
 
@@ -418,7 +418,7 @@ def extract_questions(
                     table_data
                 )
 
-                image_file = group["shared_image_path"]
+                image_file = group["group_image_file"]
 
                 if image_file:
                     print("GROUP IMAGE FILE:", image_file)
@@ -449,18 +449,22 @@ def extract_questions(
                             "/"
                         )
 
-                        shared_image_path = (
+                        group_image_path = (
                             f"https://pdf2exam.org/images/{relative_path}"
                         )
 
                         print(
                             "GROUP IMAGE URL:",
-                            shared_image_path
+                            group_image_path
                         )
                 print(
-                    "IMAGE FOUND FOR QUESTION:",
-                    question_number,
-                    shared_image_path
+                    "QUESTION IMAGE:",
+                    question_image_path
+                )
+
+                print(
+                    "GROUP IMAGE:",
+                    group_image_path
                 )
                 
 
@@ -491,8 +495,10 @@ def extract_questions(
             question_number,
             "DESCRIPTION:",
             directions,
-            "IMAGE:",
-            shared_image_path,
+            "QUESTION IMAGE:",
+            question_image_path,
+            "GROUP IMAGE:",
+            group_image_path,
             "TYPE:",
             group_type,
             "TABLE DATA:",
@@ -506,6 +512,11 @@ def extract_questions(
             table_data,
             "IS_CODE:",
             is_code
+        )
+        final_image_path = (
+            question_image_path
+            if question_image_path
+            else group_image_path
         )
 
 
@@ -537,9 +548,9 @@ def extract_questions(
                 group_type,
 
                 "image_path":
-                                str(shared_image_path)
-                                if shared_image_path
-                                else None,
+                    str(final_image_path)
+                    if final_image_path
+                    else None,
 
             }
             
