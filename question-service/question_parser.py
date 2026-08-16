@@ -144,7 +144,6 @@ def extract_questions(
 
 
     for group in direction_groups:
-
         print(
             f"GROUP {group['start']}-{group['end']}"
         )
@@ -393,10 +392,7 @@ def extract_questions(
        
 
         print("\nDIRECTION GROUPS FOUND:")
-        group_type = None
-        directions = None
-        table_data = None
-        shared_image_path = None
+
 
         for group in direction_groups:
 
