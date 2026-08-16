@@ -249,8 +249,8 @@ def extract_questions(
         group_type = None
         directions = None
         table_data = None
-        question_image_path = None
-        group_image_path = None
+        group_images = []
+        
 
         question_match = re.search(
 
@@ -345,9 +345,13 @@ def extract_questions(
             block
         )
 
-        if image_matches:
+    
+        question_images = []
+        all_images = []
+        for image_file in image_matches:
+            
 
-            image_file = image_matches[0].strip()
+            image_file = image_file.strip()
 
             matched_image = next(
                 (
@@ -357,9 +361,6 @@ def extract_questions(
                 ),
                 None
             )
-
-            print("IMAGE FILE:", image_file)
-            print("MATCHED IMAGE:", matched_image)
 
             if matched_image:
 
@@ -371,27 +372,18 @@ def extract_questions(
                     "/"
                 )
 
-                question_image_path = (
-                        f"https://pdf2exam.org/images/{relative_path}"
-                    )
-
-                print(
-                    "QUESTION IMAGE URL:",
-                    question_image_path
+                image_url = (
+                    f"https://pdf2exam.org/images/{relative_path}"
                 )
 
+                question_images.append(image_url)
 
             else:
 
-                question_image_path = image_file
+                question_images.append(image_file)
+        
 
-                print(
-                    "IMAGE NOT FOUND, USING:",
-                    question_image_path
-                )
-       
-
-        print("\nDIRECTION GROUPS FOUND:")
+            print("\nDIRECTION GROUPS FOUND:")
 
 
         for group in direction_groups:
@@ -449,22 +441,22 @@ def extract_questions(
                             "/"
                         )
 
-                        group_image_path = (
-                                f"https://pdf2exam.org/images/{relative_path}"
-                            )
+                        group_images.append(
+                            f"https://pdf2exam.org/images/{relative_path}"
+                        )
 
                         print(
                             "GROUP IMAGE URL:",
-                            group_image_path
+                            group_images
                         )
                 print(
                     "QUESTION IMAGE:",
-                    question_image_path
+                    question_images
                 )
 
                 print(
                     "GROUP IMAGE:",
-                    group_image_path
+                    group_images
                 )
                 
 
@@ -495,10 +487,9 @@ def extract_questions(
             question_number,
             "DESCRIPTION:",
             directions,
-            "QUESTION IMAGE:",
-            question_image_path,
+
             "GROUP IMAGE:",
-            group_image_path,
+            group_images,
             "TYPE:",
             group_type,
             "TABLE DATA:",
@@ -513,13 +504,19 @@ def extract_questions(
             "IS_CODE:",
             is_code
         )
-        final_image_path = (
-                question_image_path
-                or group_image_path
-            )
+
+
+        if question_images:
+            all_images.extend(question_images)
+
+        if group_images:
+            for img in group_images:
+                if img not in all_images:
+                    all_images.append(img)
+
         print(
-            "FINAL IMAGE SELECTED:",
-            final_image_path
+            "FINAL IMAGES:",
+            all_images
         )
 
 
@@ -550,11 +547,13 @@ def extract_questions(
                 "group_type":
                 group_type,
 
-                "image_path":
-                final_image_path,
+                "image_paths":
+                    all_images,
 
-                "shared_image_path":
-                group_image_path,
+                "image_path":
+                    all_images[0]
+                    if all_images
+                    else None,
 
             }
             
