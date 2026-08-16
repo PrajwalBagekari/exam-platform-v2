@@ -25,6 +25,14 @@ def pdf_node(state):
         )
 
     state["pdf_data"] = response.json()
+    print("\nPDF DATA KEYS:")
+    print(state["pdf_data"].keys())
+
+    print("\nPDF TABLES:")
+    print(state["pdf_data"].get("tables"))
+
+    print("\nPDF TABLE COUNT:")
+    print(len(state["pdf_data"].get("tables", [])))
 
     return state
 
