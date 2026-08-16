@@ -215,33 +215,39 @@ def extract_questions(
 
     for group in direction_groups:
 
-        if (
-            group["group_type"] in
-            ["table", "bar_graph", "pie_chart", "line_graph"]
-            and table_index < len(usable_tables)
-        ):
+        group["table_data"] = None
 
-            table = usable_tables[table_index]
+        if group["group_type"] != "table":
+            continue
 
-            group["table_data"] = (
-                table.get("rows")
-                if isinstance(table, dict)
-                else table
+        if table_index >= len(usable_tables):
+            print(
+                f"NO TABLE FOUND FOR GROUP "
+                f"{group['start']}-{group['end']}"
             )
-            print("USABLE TABLES:")
-            print(usable_tables)
+            continue
 
-            print("USABLE TABLE COUNT:")
-            print(len(usable_tables))
+        table = usable_tables[table_index]
 
-        
-            print(group["table_data"])
+        group["table_data"] = (
+            table.get("rows")
+            if isinstance(table, dict)
+            else table
+        )
+        print("\nUSABLE TABLES:")
+        print(usable_tables)
 
-            table_index += 1
+        print("USABLE TABLE COUNT:")
+        print(len(usable_tables))  
 
-        else:
+        print(
+            f"TABLE ATTACHED TO GROUP "
+            f"{group['start']}-{group['end']}"
+        )
 
-            group["table_data"] = None
+        print(group["table_data"])
+
+        table_index += 1
     is_code = False
 
     for block in blocks:
@@ -398,8 +404,16 @@ def extract_questions(
 
                 directions = group["directions"]
                 table_data = group.get("table_data")
+                print(
+                    f"QUESTION {question_number} "
+                    f"MATCHED GROUP "
+                    f"{group['start']}-{group['end']}"
+                )
 
-                if not table_data:
+                print("TABLE DATA:")
+                print(table_data)
+
+                if table_data == []:
                     table_data = None
 
                 directions = directions.strip()
