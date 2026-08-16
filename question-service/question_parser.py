@@ -246,9 +246,14 @@ def extract_questions(
     is_code = False
 
     for block in blocks:
+
+        group_type = None
+        directions = None
         table_data = None
+        shared_image_path = None
 
         question_match = re.search(
+
             r"^(Q\d+\..*?)(?=\(a\)|$)",
             block,
             flags=re.DOTALL | re.IGNORECASE
