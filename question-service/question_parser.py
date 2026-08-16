@@ -388,6 +388,7 @@ def extract_questions(
        
 
         print("\nDIRECTION GROUPS FOUND:")
+        group_type = None
 
         for group in direction_groups:
 
@@ -457,6 +458,7 @@ def extract_questions(
                     question_number,
                     shared_image_path
                 )
+                
 
                 group_type = (
                     group["group_type"]
