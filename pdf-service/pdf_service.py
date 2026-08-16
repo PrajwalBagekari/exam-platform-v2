@@ -120,6 +120,11 @@ def process_pdf(pdf_path):
     # Make sure extracted_tables is created before return
     # Example:
     # extracted_tables = extract_tables_from_docx(docx_path)
+    print("API RETURN TABLE COUNT:")
+    print(len(extracted_tables))
+
+    print("API RETURN TABLES:")
+    print(extracted_tables)
 
     return {
         "pdf_file": str(pdf_path),

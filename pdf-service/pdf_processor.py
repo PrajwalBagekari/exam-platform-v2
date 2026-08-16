@@ -424,6 +424,11 @@ class PDFProcessor:
         # =====================================================
         # RETURN EVERYTHING
         # =====================================================
+        print("RETURN TABLE COUNT:")
+        print(len(extracted_tables))
+
+        print("RETURN TABLES:")
+        print(extracted_tables)
 
         return {
             "docx": docx_path,

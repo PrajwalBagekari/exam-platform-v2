@@ -130,6 +130,7 @@ export default function TakeExam() {
     }
   );
     };
+  
   useEffect(() => {
 
     const handleBeforeUnload = (
@@ -157,6 +158,7 @@ export default function TakeExam() {
 
   }, []);
 
+  
 
   useEffect(() => {
 
@@ -591,7 +593,7 @@ export default function TakeExam() {
               ))}
             </div>
           )}
-          {/*}
+          {/*
           {currentData.image_path && (
           <div style={{ marginTop: "15px" }}>
             {currentData.image_path}
