@@ -278,7 +278,7 @@ def extract_questions(
         option_matches = re.findall(
             r"\(([a-e])\)\s*(.*?)(?=\([a-e]\)|Ans\.|Answer|$)",
             block,
-            flags=re.DOTALL | re.IGNORECASE
+            flags=re.DOTALL 
         )
 
         if len(option_matches) == 0:
