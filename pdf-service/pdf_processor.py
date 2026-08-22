@@ -280,35 +280,41 @@ class PDFProcessor:
             para_text = para.text.strip()
 
             if para_text:
-
                 text_lines.append(
                     para_text
                 )
 
-            xml = para._element.xml
+            try:
 
-            if "graphicData" in xml:
-
-                image_counter += 1
-
-                actual_image = (
-                    occurrence_to_image.get(
-                        image_counter
-                    )
+                drawings = para._element.xpath(
+                    ".//*[local-name()='blip']"
                 )
 
-                print(
-                    "PLACEHOLDER CREATED:",
-                    image_counter,
-                    "->",
-                    actual_image
-                )
+                for drawing in drawings:
 
-                if actual_image:
-
-                    text_lines.append(
-                        f"[[IMAGE:{actual_image}]]"
+                    embed = drawing.get(
+                        qn("r:embed")
                     )
+
+                    actual_image = rid_to_image.get(
+                        embed
+                    )
+
+                    print(
+                        "PARAGRAPH IMAGE:",
+                        embed,
+                        "->",
+                        actual_image
+                    )
+
+                    if actual_image:
+
+                        text_lines.append(
+                            f"[[IMAGE:{actual_image}]]"
+                        )
+
+            except Exception:
+                pass
         cleaned_text = "\n".join(
             text_lines
         )
