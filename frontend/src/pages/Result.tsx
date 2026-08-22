@@ -13,6 +13,10 @@ export default function Result() {
     questions = [],
     answers = {},
     } = location.state || {};
+    console.log("LOCATION STATE", location.state);
+    console.log("QUESTIONS", questions);
+    console.log("QUESTIONS LENGTH", questions?.length);
+    console.log("ANSWERS", answers);
 
     const correct = score;
 
@@ -298,10 +302,13 @@ export default function Result() {
             "0 2px 10px rgba(0,0,0,0.1)",
         }}
       >
+        <h3>
+          Questions Received:
+          {questions.length}
+        </h3>
         <h1>
           📝 Question Review
         </h1>
-
         {questions.map(
           (
             question: any,
@@ -314,21 +321,50 @@ export default function Result() {
             const selectedAnswer =
               answers[questionNumber];
 
+            const correctAnswer =
+              question.correct_answer;
+
             const isCorrect =
-              selectedAnswer?.toLowerCase() ===
-              question.correct_answer?.toLowerCase();
+              selectedAnswer &&
+              selectedAnswer.toUpperCase() ===
+                correctAnswer?.toUpperCase();
+
+            const options = [
+              {
+                key: "A",
+                text: question.option_a,
+              },
+              {
+                key: "B",
+                text: question.option_b,
+              },
+              {
+                key: "C",
+                text: question.option_c,
+              },
+              {
+                key: "D",
+                text: question.option_d,
+              },
+              ...(question.option_e
+                ? [
+                    {
+                      key: "E",
+                      text: question.option_e,
+                    },
+                  ]
+                : []),
+            ];
 
             return (
               <div
-                key={question.id}
+                key={question.id || index}
                 style={{
-                  border:
-                    "1px solid #e5e7eb",
+                  border: "1px solid #e5e7eb",
                   borderRadius: "12px",
                   padding: "16px",
-                  marginBottom: "16px",
-                  backgroundColor:
-                    "#ffffff",
+                  marginBottom: "20px",
+                  backgroundColor: "#ffffff",
                 }}
               >
                 <h3>
@@ -339,10 +375,119 @@ export default function Result() {
                   {question.question}
                 </p>
 
+                {options.map((option) => {
+
+                  const isSelected =
+                    selectedAnswer ===
+                    option.key;
+
+                  const isActualAnswer =
+                    correctAnswer?.toUpperCase() ===
+                    option.key;
+
+                  return (
+                    <div
+                      key={option.key}
+                      style={{
+                        padding: "10px",
+                        marginBottom: "8px",
+                        borderRadius: "8px",
+
+                        border:
+                          isActualAnswer
+                            ? "2px solid #16a34a"
+                            : isSelected
+                            ? "2px solid #dc2626"
+                            : "1px solid #d1d5db",
+
+                        backgroundColor:
+                          isActualAnswer
+                            ? "#dcfce7"
+                            : isSelected
+                            ? "#fee2e2"
+                            : "#f9fafb",
+                      }}
+                    >
+                      <strong>
+                        {option.key}.
+                      </strong>{" "}
+                      {option.text}
+
+                      {isSelected &&
+                        !isActualAnswer && (
+                          <span
+                            style={{
+                              color: "#dc2626",
+                              marginLeft: "10px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            ← Your Answer
+                          </span>
+                        )}
+
+                      {isActualAnswer && (
+                        <span
+                          style={{
+                            color: "#16a34a",
+                            marginLeft: "10px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          ← Correct Answer
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+
+                <div
+                  style={{
+                    marginTop: "12px",
+                    padding: "10px",
+                    background: "#f8fafc",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <strong>
+                    Your Answer:
+                  </strong>
+                  <br />
+
+                  {selectedAnswer
+                    ? `${selectedAnswer}. ${getOptionText(
+                        question,
+                        selectedAnswer
+                      )}`
+                    : "Not Answered"}
+                </div>
+
+                <div
+                  style={{
+                    marginTop: "12px",
+                    padding: "10px",
+                    background: "#f8fafc",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <strong>
+                    Correct Answer:
+                  </strong>
+                  <br />
+
+                  {correctAnswer?.toUpperCase()}
+                  {". "}
+                  {getOptionText(
+                    question,
+                    correctAnswer
+                  )}
+                </div>
+
                 <div
                   style={{
                     marginTop: "12px",
                     fontWeight: "bold",
+                    fontSize: "16px",
                     color:
                       !selectedAnswer
                         ? "#f59e0b"
@@ -357,46 +502,11 @@ export default function Result() {
                     ? "✅ Correct"
                     : "❌ Incorrect"}
                 </div>
-
-                <div
-                  style={{
-                    marginTop: "12px",
-                    padding: "10px",
-                    background: "#f8fafc",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <strong>
-                    Correct Answer:
-                  </strong>
-
-                  <br />
-
-                  {question.correct_answer?.toUpperCase()}
-                  {". "}
-                  {getOptionText(
-                    question,
-                    question.correct_answer
-                  )}
-                </div>
-
-                <div
-                  style={{
-                    marginTop: "12px",
-                    fontWeight: "bold",
-                    color: isCorrect
-                      ? "#16a34a"
-                      : "#dc2626",
-                  }}
-                >
-                  {isCorrect
-                    ? "✅ Correct"
-                    : "❌ Incorrect"}
-                </div>
               </div>
             );
           }
         )}
+     
       </div>
     </div>
     
