@@ -810,6 +810,11 @@ export default function TakeExam() {
             const score =
                 calculateScore();
 
+            console.log("SENDING TO RESULT", {
+                questions,
+                answers,
+              });
+
             navigate(
                 "/result",
                 {
