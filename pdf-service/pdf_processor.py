@@ -275,14 +275,6 @@ class PDFProcessor:
 
         image_counter = 0
 
-        # =====================================================
-        # TEXT + IMAGE PLACEHOLDERS
-        # =====================================================
-
-        text_lines = []
-
-        image_counter = 0
-
         for para in doc.paragraphs:
 
             para_text = para.text.strip()
@@ -317,6 +309,9 @@ class PDFProcessor:
                     text_lines.append(
                         f"[[IMAGE:{actual_image}]]"
                     )
+        cleaned_text = "\n".join(
+            text_lines
+        )
 
         noise_patterns = [
             "adda247.com/defence",
