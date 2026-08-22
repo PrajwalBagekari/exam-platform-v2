@@ -342,23 +342,20 @@ export default function Result() {
                 <div
                   style={{
                     marginTop: "12px",
-                    padding: "10px",
-                    background: "#f8fafc",
-                    borderRadius: "8px",
+                    fontWeight: "bold",
+                    color:
+                      !selectedAnswer
+                        ? "#f59e0b"
+                        : isCorrect
+                        ? "#16a34a"
+                        : "#dc2626",
                   }}
                 >
-                  <strong>
-                    Your Answer:
-                  </strong>
-
-                  <br />
-
-                  {selectedAnswer
-                    ? `${selectedAnswer}. ${getOptionText(
-                        question,
-                        selectedAnswer
-                      )}`
-                    : "Not Answered"}
+                  {!selectedAnswer
+                    ? "⏭ Skipped"
+                    : isCorrect
+                    ? "✅ Correct"
+                    : "❌ Incorrect"}
                 </div>
 
                 <div

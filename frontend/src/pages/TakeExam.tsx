@@ -255,14 +255,21 @@ export default function TakeExam() {
             calculateScore();
 
             navigate(
-            "/result",
-            {
-                state: {
-                score,
-                totalQuestions,
-                },
-            }
-            );
+                "/result",
+                {
+                  state: {
+                    score,
+                    totalQuestions,
+                    attempted,
+                    skipped,
+                    review,
+                    notVisited,
+                    timeLeft,
+                    questions,
+                    answers,
+                  },
+                }
+              );
 
             return 0;
         }
@@ -804,19 +811,21 @@ export default function TakeExam() {
                 calculateScore();
 
             navigate(
-  "/result",
-  {
-    state: {
-      score,
-      totalQuestions,
-      attempted,
-      skipped,
-      review,
-      notVisited,
-      timeLeft,
-    },
-  }
-);
+                "/result",
+                {
+                  state: {
+                    score,
+                    totalQuestions,
+                    attempted,
+                    skipped,
+                    review,
+                    notVisited,
+                    timeLeft,
+                    questions,
+                    answers,
+                  },
+                }
+              );
 
             }}
         />
