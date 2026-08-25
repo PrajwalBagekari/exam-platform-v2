@@ -556,7 +556,7 @@ export default function TakeExam() {
                 borderRadius: "6px",
               }}
             >
-              <strong>Associated Images Candidates Ignore this wull be removed soon:</strong>
+              <strong>Associated Images Candidates Ignore this wull be removed soon, Also if image is in direction please find in next question:</strong>
 
               {imageFiles.map((img, index) => (
                 <div key={index}>
