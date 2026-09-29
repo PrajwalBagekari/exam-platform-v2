@@ -7,6 +7,7 @@ export default function ExamSummary() {
   const navigate = useNavigate();
 
   const [exam, setExam] = useState<any>(null);
+  const [sections, setSections] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [userName, setUserName] = useState("");
@@ -19,12 +20,36 @@ export default function ExamSummary() {
           `https://pdf2exam.org/exam/${id}/questions`
         );
 
-        const totalQuestions =
-          response.data.questions.length;
+        const questions =
+          response.data.questions || [];
+
+        const sectionMap: any = {};
+
+        questions.forEach((q: any) => {
+          const section =
+            q.section || "General";
+
+          if (!sectionMap[section]) {
+            sectionMap[section] = 0;
+          }
+
+          sectionMap[section]++;
+        });
+
+        const sectionList =
+          Object.entries(sectionMap).map(
+            ([name, count]) => ({
+              name,
+              count,
+            })
+          );
+
+        setSections(sectionList);
 
         setExam({
-          totalQuestions,
-          totalTime: totalQuestions,
+          totalQuestions: questions.length,
+          totalTime: questions.length,
+          questions,
         });
       } catch (error) {
         console.error(error);
@@ -68,9 +93,6 @@ export default function ExamSummary() {
       </div>
     );
   }
-
-  const sectionTime =
-    exam?.totalTime ?? 0;
 
   return (
     <div
@@ -329,42 +351,34 @@ export default function ExamSummary() {
               </thead>
 
               <tbody>
-                <tr>
-                  <td
-                    style={{
-                      textAlign:
-                        "center",
-                      padding:
-                        "15px",
-                    }}
-                  >
-                    General
-                    Section
-                  </td>
+                {sections.map((section) => (
+                  <tr key={section.name}>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        padding: "15px",
+                      }}
+                    >
+                      {section.name}
+                    </td>
 
-                  <td
-                    style={{
-                      textAlign:
-                        "center",
-                    }}
-                  >
-                    {
-                      exam?.totalQuestions
-                    }
-                  </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {section.count}
+                    </td>
 
-                  <td
-                    style={{
-                      textAlign:
-                        "center",
-                    }}
-                  >
-                    {
-                      sectionTime
-                    }{" "}
-                    Minutes
-                  </td>
-                </tr>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {section.count} Minutes
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
