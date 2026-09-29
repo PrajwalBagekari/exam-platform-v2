@@ -60,3 +60,6 @@ kubernetes
 
 # MinIO Object Storage
 minio
+
+# OpenAI
+openai>=1.50.0
