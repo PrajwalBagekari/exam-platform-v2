@@ -445,9 +445,9 @@ export default function TakeExam() {
         setCurrentQuestion(
           currentQuestion + 1
         );
-
+      }
       };
-
+    
     const skipQuestion = () => {
 
       setQuestionStatusForCurrent(
@@ -858,74 +858,89 @@ export default function TakeExam() {
 
       {showSubmitSection && (
         <SubmitSectionModal
-        attempted={attempted}
-        skipped={skipped}
-        review={review}
-        notVisited={notVisited}
-        onClose={() =>
-            setShowSubmitSection(
+          attempted={attempted}
+          skipped={skipped}
+          review={review}
+            notVisited={notVisited}
+            currentSectionName={
+              sections[currentSection]?.name
+            }
+            nextSectionName={
+              sections[currentSection + 1]?.name
+            }
+            isLastSection={
+              currentSection ===
+              sections.length - 1
+            }
+            onClose={() =>
+              setShowSubmitSection(
                 false
-                )
+              )
             }
             onSubmit={() => {
 
-            const totalSections =
-              sections.length;
+              const totalSections =
+                sections.length;
 
-            const isLastSection =
-              currentSection ===
-              totalSections - 1;
+              const isLastSection =
+                currentSection ===
+                totalSections - 1;
 
-            if (isLastSection) {
+              if (isLastSection) {
 
-              const score =
-                calculateScore();
+                const score =
+                  calculateScore();
 
-              navigate(
-                "/result",
-                {
-                  state: {
-                    score,
-                    totalQuestions,
-                    attempted,
-                    skipped,
-                    review,
-                    notVisited,
-                    timeLeft,
-                    questions,
-                    answers,
-                  },
-                }
-              );
+                navigate(
+                  "/result",
+                  {
+                    state: {
+                      score,
+                      totalQuestions,
+                      attempted,
+                      skipped,
+                      review,
+                      notVisited,
+                      timeLeft,
+                      questions,
+                      answers,
+                    },
+                  }
+                );
 
-              return;
-            }
+                return;
+              }
 
-            const nextSectionName =
-              sections[
+              const nextSectionQuestions =
+                sections[
+                  currentSection + 1
+                ]?.questions || [];
+
+              const firstQuestion =
+                nextSectionQuestions[0];
+
+              const firstQuestionIndex =
+                questions.findIndex(
+                  (q) =>
+                    q.id ===
+                    firstQuestion?.id
+                );
+
+              setCurrentSection(
                 currentSection + 1
-              ]?.name;
-
-            const firstQuestionIndex =
-              questions.findIndex(
-                (q) =>
-                  q.section ===
-                  nextSectionName
               );
 
-            setCurrentSection(
-              currentSection + 1
-            );
+              setCurrentQuestion(
+                firstQuestionIndex + 1
+              );
 
-            setCurrentQuestion(
-              firstQuestionIndex + 1
-            );
+              setShowSubmitSection(
+                false
+              );
 
-            setShowSubmitSection(false);
-
-          }}
-        />
-      )}
+            }}
+          />
+        )}
     </>
   );
-}}
+}
