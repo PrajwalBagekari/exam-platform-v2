@@ -3,6 +3,11 @@ interface Props {
   skipped: number;
   review: number;
   notVisited: number;
+
+  currentSectionName: string;
+  nextSectionName?: string;
+  isLastSection: boolean;
+
   onClose: () => void;
   onSubmit: () => void;
 }
@@ -12,6 +17,11 @@ export default function SubmitSectionModal({
   skipped,
   review,
   notVisited,
+
+  currentSectionName,
+  nextSectionName,
+  isLastSection,
+
   onClose,
   onSubmit,
 }: Props) {
@@ -29,17 +39,49 @@ export default function SubmitSectionModal({
       <div
         style={{
           background: "white",
-          padding: "20px",
+          padding: "25px",
           borderRadius: "10px",
-          minWidth: "350px",
+          minWidth: "400px",
         }}
       >
-        <h2>Submit Section</h2>
+        <h2>
+          {currentSectionName} Completed
+        </h2>
 
-        <p>Attempted: {attempted}</p>
-        <p>Skipped: {skipped}</p>
-        <p>Review: {review}</p>
-        <p>Not Visited: {notVisited}</p>
+        <div>
+          <p>
+            <strong>Attempted:</strong>{" "}
+            {attempted}
+          </p>
+
+          <p>
+            <strong>Skipped:</strong>{" "}
+            {skipped}
+          </p>
+
+          <p>
+            <strong>Review:</strong>{" "}
+            {review}
+          </p>
+
+          <p>
+            <strong>Not Visited:</strong>{" "}
+            {notVisited}
+          </p>
+        </div>
+
+        <br />
+
+        {isLastSection ? (
+          <h3>
+            Submit Entire Exam?
+          </h3>
+        ) : (
+          <h3>
+            Proceed To{" "}
+            {nextSectionName} ?
+          </h3>
+        )}
 
         <br />
 
@@ -50,7 +92,9 @@ export default function SubmitSectionModal({
         {" "}
 
         <button onClick={onSubmit}>
-          Submit Section
+          {isLastSection
+            ? "Submit Exam"
+            : "Start Next Section"}
         </button>
       </div>
     </div>
