@@ -7,6 +7,7 @@ import QuestionPalette from "../components/QuestionPalette";
 
 type Question = {
   id: number;
+  section?: string;
   question: string;
   is_code?: boolean;
 
@@ -32,6 +33,11 @@ export default function TakeExam() {
 
   const [questions, setQuestions] =
     useState<Question[]>([]);
+  const [sections, setSections] =
+    useState<any[]>([]);
+
+  const [currentSection, setCurrentSection] =
+    useState(0);
 
   const [loading, setLoading] =
     useState(true);
@@ -119,10 +125,6 @@ export default function TakeExam() {
       state: {
         score,
         totalQuestions,
-        attempted,
-        skipped,
-        review,
-        notVisited,
         timeLeft,
         questions,
         answers,
@@ -180,8 +182,31 @@ export default function TakeExam() {
         );
 
         setQuestions(
-                  sortedQuestions
-                );
+            sortedQuestions
+          );
+
+          const grouped: Record<string, any[]> = {};
+
+          sortedQuestions.forEach((q: any) => {
+            const section =
+              q.section || "General";
+
+            if (!grouped[section]) {
+              grouped[section] = [];
+            }
+
+            grouped[section].push(q);
+          });
+
+          const sectionList =
+            Object.entries(grouped).map(
+              ([name, questions]) => ({
+                name,
+                questions,
+              })
+            );
+
+          setSections(sectionList);
                 console.log(
           "FIRST QUESTION:",
           sortedQuestions[0]?.question
@@ -313,6 +338,32 @@ export default function TakeExam() {
       </h1>
     );
   }
+
+
+  const currentQuestionData =
+    questions[currentQuestion - 1];
+
+  const currentQuestionSection =
+    currentQuestionData?.section;
+
+  const sectionQuestionNumbers =
+    questions
+      .map((q, index) => ({
+        section: q.section,
+        no: index + 1,
+      }))
+      .filter(
+        q =>
+          q.section ===
+          currentQuestionSection
+      )
+      .map(q => q.no);
+
+  const isLastQuestionOfSection =
+    currentQuestion ===
+    sectionQuestionNumbers[
+      sectionQuestionNumbers.length - 1
+    ];
     
 
   
@@ -383,25 +434,62 @@ export default function TakeExam() {
         setQuestionStatusForCurrent("answered");
       }
 
-      if (currentQuestion < totalQuestions) {
-        setCurrentQuestion(currentQuestion + 1);
-      }
-    };
+      if (isLastQuestionOfSection) {
+
+        setShowSubmitSection(true);
+
+      } else if (
+        currentQuestion < totalQuestions
+      ) {
+
+        setCurrentQuestion(
+          currentQuestion + 1
+        );
+
+      };
 
     const skipQuestion = () => {
-      setQuestionStatusForCurrent("skipped");
 
-      if (currentQuestion < totalQuestions) {
-        setCurrentQuestion(currentQuestion + 1);
+      setQuestionStatusForCurrent(
+        "skipped"
+      );
+
+      if (isLastQuestionOfSection) {
+
+        setShowSubmitSection(true);
+
+      } else if (
+        currentQuestion < totalQuestions
+      ) {
+
+        setCurrentQuestion(
+          currentQuestion + 1
+        );
+
       }
+
     };
 
     const markForReview = () => {
-      setQuestionStatusForCurrent("review");
 
-      if (currentQuestion < totalQuestions) {
-        setCurrentQuestion(currentQuestion + 1);
+      setQuestionStatusForCurrent(
+        "review"
+      );
+
+      if (isLastQuestionOfSection) {
+
+        setShowSubmitSection(true);
+
+      } else if (
+        currentQuestion < totalQuestions
+      ) {
+
+        setCurrentQuestion(
+          currentQuestion + 1
+        );
+
       }
+
     };
 
   const attempted =
@@ -483,7 +571,16 @@ export default function TakeExam() {
             )}
           </h2>
 
-          <hr />
+                    <hr />
+                    <h2
+            style={{
+              color: "#2563eb",
+            }}
+          >
+            Section:
+            {" "}
+            {sections[currentSection]?.name}
+          </h2>
 
           <h3>
             Question{" "}
@@ -772,27 +869,63 @@ export default function TakeExam() {
             }
             onSubmit={() => {
 
-            const score =
+            const totalSections =
+              sections.length;
+
+            const isLastSection =
+              currentSection ===
+              totalSections - 1;
+
+            if (isLastSection) {
+
+              const score =
                 calculateScore();
 
-            navigate(
-  "/result",
-  {
-    state: {
-      score,
-      totalQuestions,
-      attempted,
-      skipped,
-      review,
-      notVisited,
-      timeLeft,
-    },
-  }
-);
+              navigate(
+                "/result",
+                {
+                  state: {
+                    score,
+                    totalQuestions,
+                    attempted,
+                    skipped,
+                    review,
+                    notVisited,
+                    timeLeft,
+                    questions,
+                    answers,
+                  },
+                }
+              );
 
-            }}
+              return;
+            }
+
+            const nextSectionName =
+              sections[
+                currentSection + 1
+              ]?.name;
+
+            const firstQuestionIndex =
+              questions.findIndex(
+                (q) =>
+                  q.section ===
+                  nextSectionName
+              );
+
+            setCurrentSection(
+              currentSection + 1
+            );
+
+            setCurrentQuestion(
+              firstQuestionIndex + 1
+            );
+
+            setShowSubmitSection(false);
+
+          }}
         />
       )}
     </>
   );
-}
+}}
