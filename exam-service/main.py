@@ -1,3 +1,5 @@
+from unittest import result
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -143,6 +145,8 @@ def get_exam_questions(
         }
         for q, section in questions
     ]
+    print("FIRST QUESTION:")
+    print(result[0] if result else "NO QUESTIONS")
 
 
     db.close()

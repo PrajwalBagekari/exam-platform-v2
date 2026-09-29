@@ -7,13 +7,16 @@ from sqlalchemy import (
     Boolean
 )
 from pydantic import BaseModel
-
+from sqlalchemy.orm import relationship
 class QuestionSchema(BaseModel):
     question: str
+    section: str | None = None
+
     description: str | None = None
     shared_image_path: str | None = None
     image_path: str | None = None
     table_data: str | None = None
+
     is_code: bool = False
 from database import Base
 
