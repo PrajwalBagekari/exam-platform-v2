@@ -1,7 +1,6 @@
+import os
 import re
-from openai import OpenAI
-
-client = OpenAI()
+import requests
 
 SECTION_KEYWORDS = {
     "Computer Knowledge": [
@@ -127,7 +126,6 @@ def detect_section(
     is_code: bool = False,
 ) -> str:
 
-    # Existing deterministic checks
     if group_type in {
         "table",
         "bar_graph",
@@ -149,7 +147,6 @@ def detect_section(
         combined_text,
     ).strip()
 
-    # Existing keyword scoring logic
     scores = {}
 
     for section, keywords in SECTION_KEYWORDS.items():
@@ -169,11 +166,11 @@ def detect_section(
 
     best_score = scores[best_section]
 
-    # High confidence keyword match
+    # High confidence keyword classification
     if best_score >= 2:
         return best_section
 
-    # LLM fallback for ambiguous questions
+    # OpenRouter fallback
     try:
 
         prompt = f"""
@@ -192,7 +189,7 @@ Categories:
 Rules:
 1. Return ONLY the category name.
 2. No explanation.
-3. No punctuation.
+3. No extra text.
 4. No markdown.
 
 Question:
@@ -202,32 +199,54 @@ Description:
 {description or ""}
 """
 
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            temperature=0,
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "Return only one category name."
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": prompt,
-                },
-            ],
+        response = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": (
+                    f"Bearer {os.getenv('OPENROUTER_API_KEY')}"
+                ),
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": "meta-llama/llama-3.1-8b-instruct:free",
+                "temperature": 0,
+                "max_tokens": 20,
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": (
+                            "Return ONLY one category name from: "
+                            "Computer Knowledge, "
+                            "Quantitative Aptitude, "
+                            "Reasoning Ability, "
+                            "English Language, "
+                            "General Awareness, "
+                            "Data Interpretation."
+                        ),
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    },
+                ],
+            },
+            timeout=30,
         )
 
+        response.raise_for_status()
+
+        result = response.json()
+
         content = (
-            response.choices[0]
-            .message.content
+            result.get("choices", [{}])[0]
+            .get("message", {})
+            .get("content", "")
         )
 
         predicted_section = (
             content.strip()
             if content
-            else "General Awareness"
+            else ""
         )
 
         if predicted_section in SECTIONS:
@@ -238,7 +257,7 @@ Description:
             f"Section detection failed: {e}"
         )
 
-    # Fallback to original behavior
+    # Original fallback behavior
     if best_score > 0:
         return best_section
 
