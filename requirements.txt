@@ -63,3 +63,6 @@ minio
 
 # OpenAI
 openai>=1.50.0
+# Brevo API
+sib-api-v3-sdk
+reportlab

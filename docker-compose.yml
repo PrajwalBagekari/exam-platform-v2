@@ -15,7 +15,6 @@ services:
     ports:
       - "5173:5173"
 
-
   exam-service:
     build:
       context: ./exam-service
@@ -24,11 +23,15 @@ services:
       - postgres
     ports:
       - "8006:8006"
+    env_file:
+      - .env
 
   gateway:
     image: prajwalbagekari/gateway:latest
     ports:
       - "8000:8000"
+    env_file:
+      - .env
 
   pdf-service:
     build:
@@ -37,17 +40,23 @@ services:
       - "8001:8001"
     volumes:
       - uploads:/app/uploads
+    env_file:
+      - .env
 
   question-service:
     build:
       context: ./question-service
     ports:
       - "8002:8002"
+    env_file:
+      - .env
 
   rag-service:
     image: prajwalbagekari/rag-service:latest
     ports:
       - "8003:8003"
+    env_file:
+      - .env
 
   image-service:
     image: prajwalbagekari/image-service:latest
@@ -55,6 +64,8 @@ services:
       - "8005:8005"
     volumes:
       - uploads:/app/uploads
+    env_file:
+      - .env
 
   langgraph-service:
     image: prajwalbagekari/langgraph-service:latest
@@ -68,6 +79,8 @@ services:
       - "8008:8008"
     volumes:
       - uploads:/app/uploads
+    env_file:
+      - .env
 
 volumes:
   uploads:

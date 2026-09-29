@@ -3,8 +3,9 @@ from unittest import result
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from exam_service import ExamService
-
+from services.email_service import (
+    send_result_email
+)
 from database import (
     engine,
     SessionLocal
@@ -149,4 +150,23 @@ def get_exam_questions(
 
     return {
         "questions": result
+    }
+@app.post("/submit-result")
+def submit_result(data: dict):
+
+    user_name = data["user_name"]
+    email = data["email"]
+
+    score = data["score"]
+    total_questions = data["total_questions"]
+
+    attempted = data["attempted"]
+    skipped = data["skipped"]
+    review = data["review"]
+
+    # generate_result_pdf(...)
+    # send_result_email(...)
+
+    return {
+        "message": "Result email sent"
     }

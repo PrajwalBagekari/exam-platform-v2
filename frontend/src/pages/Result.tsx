@@ -83,6 +83,15 @@ export default function Result() {
       "0 2px 10px rgba(0,0,0,0.1)",
     textAlign: "center" as const,
   };
+  const candidateName =
+    localStorage.getItem(
+      "candidateName"
+    );
+
+  const candidateEmail =
+    localStorage.getItem(
+      "candidateEmail"
+    );
   
   const renderCard = (
     title: string,
@@ -158,7 +167,14 @@ export default function Result() {
           fontWeight: "bold",
           marginBottom: "30px",
         }}
-      >
+      >  
+      <h3>
+        Name: {candidateName}
+      </h3>
+
+      <h3>
+        Email: {candidateEmail}
+      </h3>
         🎉 Congratulations!
         You have successfully
         completed the exam.
