@@ -380,6 +380,35 @@ export default function ExamSummary() {
                   </tr>
                 ))}
               </tbody>
+  {sections.map((section) => (
+    <tr key={section.name}>
+      <td
+        style={{
+          textAlign: "center",
+          padding: "15px",
+        }}
+      >
+        {section.name}
+      </td>
+
+      <td
+        style={{
+          textAlign: "center",
+        }}
+      >
+        {section.count}
+      </td>
+
+      <td
+        style={{
+          textAlign: "center",
+        }}
+      >
+        {section.count} Minutes
+      </td>
+    </tr>
+  ))}
+</tbody>
             </table>
           </div>
 
