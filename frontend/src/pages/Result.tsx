@@ -100,6 +100,43 @@ export default function Result() {
       </h2>
     </div>
   );
+  const sectionStats = questions.reduce(
+    (acc: any, question: any, index: number) => {
+      const section =
+        question.section || "General";
+
+      if (!acc[section]) {
+        acc[section] = {
+          total: 0,
+          attempted: 0,
+          correct: 0,
+          incorrect: 0,
+        };
+      }
+
+      acc[section].total++;
+
+      const userAnswer =
+        answers[index + 1];
+
+      if (userAnswer) {
+        acc[section].attempted++;
+
+        if (
+          userAnswer.toLowerCase() ===
+          question.correct_answer?.toLowerCase()
+        ) {
+          acc[section].correct++;
+        } else {
+          acc[section].incorrect++;
+        }
+      }
+
+      return acc;
+    },
+    {}
+  );
+
 
   return (
     <div
@@ -218,75 +255,72 @@ export default function Result() {
         </h1>
       </div>
 
-      <div
-        style={{
-          marginTop: "20px",
-          marginBottom: "10px",
-          fontSize: "22px",
-          fontWeight: "bold",
-        }}
-      >
-        General Section
+      {Object.entries(sectionStats).map(
+  ([sectionName, stats]: any) => {
+    const accuracy =
+      stats.attempted > 0
+        ? (
+            (stats.correct /
+              stats.attempted) *
+            100
+          ).toFixed(2)
+        : "0.00";
+
+    return (
+      <div key={sectionName}>
+        <div
+          style={{
+            marginTop: "20px",
+            marginBottom: "10px",
+            fontSize: "22px",
+            fontWeight: "bold",
+          }}
+        >
+          {sectionName}
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(3, 1fr)",
+            gap: "20px",
+          }}
+        >
+          {renderCard(
+            "Score",
+            `${stats.correct}/${stats.total}`
+          )}
+
+          {renderCard(
+            "Attempted",
+            stats.attempted
+          )}
+
+          {renderCard(
+            "Correct",
+            stats.correct
+          )}
+
+          {renderCard(
+            "Incorrect",
+            stats.incorrect
+          )}
+
+          {renderCard(
+            "Total Questions",
+            stats.total
+          )}
+
+          {renderCard(
+            "Accuracy",
+            `${accuracy}%`
+          )}
+        </div>
       </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(3, 1fr)",
-          gap: "20px",
-        }}
-      >
-        {renderCard(
-          "Score",
-          `${score}/${totalQuestions}`
-        )}
-
-        {renderCard(
-          "Attempted",
-          attempted
-        )}
-
-        {renderCard(
-          "Correct",
-          correct
-        )}
-
-        {renderCard(
-          "Incorrect",
-          incorrect
-        )}
-
-        {renderCard(
-          "Skipped",
-          skipped
-        )}
-
-        {renderCard(
-          "Unseen",
-          unseen
-        )}
-
-        {renderCard(
-          "Accuracy",
-          `${accuracy}%`
-        )}
-
-        {renderCard(
-          "Total Time",
-          `${totalTime} Min`
-        )}
-
-        {renderCard(
-          "Utilized Time",
-          `${utilizedTime} Min`
-        )}
-
-        {renderCard(
-          "Wasted Time",
-          `${wastedTime} Min`
-        )}
-      </div>
+    );
+  }
+)}
 
       <div
         style={{

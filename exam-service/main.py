@@ -110,7 +110,10 @@ def get_exam_questions(
     db = SessionLocal()
 
     questions = (
-        db.query(Question)
+        db.query(
+            Question,
+            Section
+        )
         .join(
             Section,
             Question.section_id == Section.id
@@ -124,6 +127,7 @@ def get_exam_questions(
     result = [
         {
             "id": q.id,
+            "section": section.name,
             "question": q.question_text,
             "description": q.directions,
             "is_code": q.is_code,
@@ -137,8 +141,9 @@ def get_exam_questions(
             "correct_answer": q.correct_answer,
             "image_path": q.image_path
         }
-        for q in questions
+        for q, section in questions
     ]
+
 
     db.close()
 

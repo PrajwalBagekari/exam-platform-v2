@@ -1,6 +1,6 @@
 import os
 import re
-
+from question_classifier import detect_section
 
 DIRECTION_PATTERN = re.compile(
     r"Directions\s*\((\d+)-(\d+)\)\s*:(.*?)(?=Q\d+\.|$)",
@@ -520,20 +520,25 @@ def extract_questions(
         )
 
 
+        section = detect_section(
+            question_text=question_text,
+            description=directions,
+            group_type=group_type,
+            is_code=is_code
+        )
+
         questions.append(
             {
-                "section": "General",
+                "section": section,
 
                 "question":
                 question_text,
 
-                "is_code": 
+                "is_code":
                 is_code,
 
                 "description":
                 directions,
-
-                
 
                 "table_data":
                 table_data,
@@ -556,8 +561,6 @@ def extract_questions(
                     else None,
 
             }
-            
-            
         )
 
     print(
