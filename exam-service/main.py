@@ -35,15 +35,11 @@ service = ExamService()
 @app.on_event("startup")
 def startup():
 
-    Base.metadata.drop_all( bind=engine)
-
     Base.metadata.create_all(
         bind=engine
     )
 
-    print(
-        "Database recreated."
-    )
+    print("Database ready.")
 
 
 @app.get("/")
