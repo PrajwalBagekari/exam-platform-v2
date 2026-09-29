@@ -17,6 +17,8 @@ services:
 
 
   exam-service:
+    build:
+      context: ./exam-service
     image: prajwalbagekari/exam-service:latest
     depends_on:
       - postgres
