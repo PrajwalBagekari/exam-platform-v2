@@ -1,5 +1,7 @@
 import re
+from openai import OpenAI
 
+client = OpenAI()
 
 SECTION_KEYWORDS = {
     "Computer Knowledge": [
@@ -113,6 +115,10 @@ SECTION_KEYWORDS = {
     ],
 }
 
+SECTIONS = list(SECTION_KEYWORDS.keys()) + [
+    "Data Interpretation"
+]
+
 
 def detect_section(
     question_text: str,
@@ -120,6 +126,8 @@ def detect_section(
     group_type: str | None = None,
     is_code: bool = False,
 ) -> str:
+
+    # Existing deterministic checks
     if group_type in {
         "table",
         "bar_graph",
@@ -139,11 +147,13 @@ def detect_section(
         r"\s+",
         " ",
         combined_text,
-    )
+    ).strip()
 
+    # Existing keyword scoring logic
     scores = {}
 
     for section, keywords in SECTION_KEYWORDS.items():
+
         score = 0
 
         for keyword in keywords:
@@ -153,11 +163,83 @@ def detect_section(
         scores[section] = score
 
     best_section = max(
-    scores.items(),
-    key=lambda item: item[1]
-)[0]
+        scores.items(),
+        key=lambda item: item[1]
+    )[0]
 
-    if scores[best_section] == 0:
-        return "General Awareness"
+    best_score = scores[best_section]
 
-    return best_section
+    # High confidence keyword match
+    if best_score >= 2:
+        return best_section
+
+    # LLM fallback for ambiguous questions
+    try:
+
+        prompt = f"""
+You are an expert competitive exam classifier.
+
+Classify the following question into EXACTLY ONE category.
+
+Categories:
+- Computer Knowledge
+- Quantitative Aptitude
+- Reasoning Ability
+- English Language
+- General Awareness
+- Data Interpretation
+
+Rules:
+1. Return ONLY the category name.
+2. No explanation.
+3. No punctuation.
+4. No markdown.
+
+Question:
+{question_text}
+
+Description:
+{description or ""}
+"""
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            temperature=0,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "Return only one category name."
+                    ),
+                },
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
+            ],
+        )
+
+        content = (
+            response.choices[0]
+            .message.content
+        )
+
+        predicted_section = (
+            content.strip()
+            if content
+            else "General Awareness"
+        )
+
+        if predicted_section in SECTIONS:
+            return predicted_section
+
+    except Exception as e:
+        print(
+            f"Section detection failed: {e}"
+        )
+
+    # Fallback to original behavior
+    if best_score > 0:
+        return best_section
+
+    return "General Awareness"
