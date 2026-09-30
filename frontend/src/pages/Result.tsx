@@ -8,7 +8,7 @@ export default function Result() {
     totalQuestions = 0,
     attempted = 0,
     skipped = 0,
-    notVisited = 0,
+    review = 0,
     timeLeft = 0,
     questions = [],
     answers = {},
@@ -17,10 +17,7 @@ export default function Result() {
     const correct = score;
 
     const incorrect =
-    Math.max(
-        attempted - correct,
-        0
-    );
+      attempted - correct;
     const getOptionText = (
       question: any,
       answer?: string
@@ -47,34 +44,77 @@ export default function Result() {
     };
 
     const unseen =
-    notVisited;
+  Math.max(
+    totalQuestions -
+      attempted -
+      skipped -
+      review,
+    0
+  );
 
-    const accuracy =
-    attempted > 0
-        ? (
-            (correct /
-            attempted) *
-            100
-        ).toFixed(2)
-        : "0.00";
+const accuracy =
+  attempted > 0
+    ? (
+        (correct / attempted) * 100
+      ).toFixed(2)
+    : "0.00";
 
-    const totalTime = 60;
+const savedTimers =
+  JSON.parse(
+    localStorage.getItem(
+      "sectionTimers"
+    ) || "[]"
+  );
 
-    const utilizedTime =
-    Math.max(
-        totalTime -
-        Math.floor(
-            timeLeft / 60
-        ),
+const totalTime =
+  savedTimers.length > 0
+    ? savedTimers.reduce(
+        (
+          total: number,
+          section: any
+        ) =>
+          total +
+          Number(
+            section.timer_minutes ||
+            section.count ||
+            0
+          ),
         0
-    );
+      )
+    : totalQuestions;
 
-    const wastedTime =
-    Math.max(
-        totalTime -
-        utilizedTime,
-        0
-    );
+const remainingMinutes =
+  Math.floor(
+    timeLeft / 60
+  );
+
+const utilizedTime =
+  Math.max(
+    totalTime -
+      remainingMinutes,
+    0
+  );
+
+const wastedTime =
+  remainingMinutes;
+const completionPercentage =
+  totalQuestions > 0
+    ? (
+        (attempted /
+          totalQuestions) *
+        100
+      ).toFixed(2)
+    : "0.00";
+
+
+const correctPercentage =
+  totalQuestions > 0
+    ? (
+        (correct /
+          totalQuestions) *
+        100
+      ).toFixed(2)
+    : "0.00";
   const cardStyle = {
     background: "#ffffff",
     borderRadius: "12px",
@@ -186,6 +226,7 @@ export default function Result() {
           attempted: 0,
           correct: 0,
           incorrect: 0,
+          skipped: 0,
         };
       }
 
@@ -205,6 +246,9 @@ export default function Result() {
         } else {
           acc[section].incorrect++;
         }
+      }
+      else {
+        acc[section].skipped++;
       }
 
       return acc;
@@ -295,6 +339,14 @@ export default function Result() {
           "Skipped",
           skipped
         )}
+        {renderCard(
+          "Review",
+          review
+        )}
+        {renderCard(
+          "Completion %",
+          `${completionPercentage}%`
+        )}
 
         {renderCard(
           "Unseen",
@@ -304,6 +356,12 @@ export default function Result() {
         {renderCard(
           "Accuracy",
           `${accuracy}%`
+        )}
+
+
+        {renderCard(
+          "Correct %",
+          `${correctPercentage}%`
         )}
 
         {renderCard(
@@ -392,6 +450,10 @@ export default function Result() {
           {renderCard(
             "Total Questions",
             stats.total
+          )}
+          {renderCard(
+            "Skipped",
+            stats.skipped || 0
           )}
 
           {renderCard(

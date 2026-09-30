@@ -192,7 +192,15 @@ def submit_result(data: dict):
         review=review,
     )
 
+    email_sent = send_result_email(
+        email=email,
+        exam_name="PDF2Exam",
+        score=score,
+        total_questions=total_questions
+    )
+
     return {
         "message": "PDF generated",
         "pdf_path": pdf_path,
+        "email_sent": email_sent,
     }
