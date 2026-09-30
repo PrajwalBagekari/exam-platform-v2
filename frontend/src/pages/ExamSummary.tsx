@@ -41,6 +41,7 @@ export default function ExamSummary() {
             ([name, count]) => ({
               name,
               count,
+              timer_minutes: count,
             })
           );
 
@@ -384,7 +385,43 @@ export default function ExamSummary() {
                         textAlign: "center",
                       }}
                     >
-                      {section.count} Minutes
+                      <input
+                        type="number"
+                        min="1"
+                        value={
+                          section.timer_minutes ??
+                          section.count
+                        }
+                        onChange={(e) => {
+
+                          const newSections =
+                            sections.map((s) =>
+                              s.name === section.name
+                                ? {
+                                    ...s,
+                                    timer_minutes:
+                                      Number(
+                                        e.target.value
+                                      ),
+                                  }
+                                : s
+                            );
+
+                          setSections(
+                            newSections
+                          );
+                        }}
+                        style={{
+                          width: "90px",
+                          padding: "6px",
+                          textAlign:
+                            "center",
+                          border:
+                            "1px solid #ccc",
+                          borderRadius:
+                            "6px",
+                        }}
+                      />
                     </td>
                   </tr>
                 ))}
