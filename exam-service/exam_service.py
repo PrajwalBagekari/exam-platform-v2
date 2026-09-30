@@ -32,22 +32,46 @@ class ExamService:
 
             db.refresh(exam)
 
-            section = Section(
-                exam_id=exam.id,
-                name="General",
-                total_questions=len(
-                    questions
-                ),
-                timer_minutes=60
-            )
+            # section = Section(
+            #     exam_id=exam.id,
+            #     name="General",
+            #     total_questions=len(
+            #         questions
+            #     ),
+            #     timer_minutes=60
+            # )
 
-            db.add(section)
+            # db.add(section)
 
-            db.commit()
+            # db.commit()
 
-            db.refresh(section)
+            # db.refresh(section)
+            sections = {}
 
             for q in questions:
+                section_name = q.get(
+                    "section",
+                    "General"
+                )
+
+                if section_name not in sections:
+
+                    section = Section(
+                        exam_id=exam.id,
+                        name=section_name,
+                        total_questions=0,
+                        timer_minutes=0
+                    )
+
+                    db.add(section)
+
+                    db.flush()
+
+                    sections[section_name] = section
+
+                sections[
+                    section_name
+                ].total_questions += 1
                 print(
                     "SECTION RECEIVED:",
                     q.get("section")
@@ -70,7 +94,9 @@ class ExamService:
                 )
 
                 question = Question(
-                    section_id=section.id,
+                    section_id=sections[
+                        section_name
+                    ].id,
 
                     question_text=q.get(
                         "question",
@@ -137,6 +163,17 @@ class ExamService:
                 
                 )
                 db.add(question)
+            for section in sections.values():
+
+                if (
+                    section.total_questions > 0
+                ):
+
+                    if not section.timer_minutes:
+
+                        section.timer_minutes = (
+                            section.total_questions
+                        )
 
             db.commit()
 
