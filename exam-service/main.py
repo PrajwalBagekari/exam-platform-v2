@@ -12,7 +12,9 @@ from database import (
     engine,
     SessionLocal
 )
-
+from html_pdf_service import (
+    generate_html_pdf
+)
 from models import (
     Base,
     Exam,
@@ -88,7 +90,21 @@ def save(data: dict):
         questions
     )
 
+@app.get("/test-html-pdf")
+def test_html_pdf():
 
+    pdf_path = (
+        "results/result_page.pdf"
+    )
+
+    generate_html_pdf(
+        "https://pdf2exam.org/result",
+        pdf_path,
+    )
+
+    return {
+        "pdf_path": pdf_path
+    }
 @app.get("/exam/{exam_id}")
 def get_exam(
     exam_id: int
