@@ -48,6 +48,15 @@ class ExamService:
             db.refresh(section)
 
             for q in questions:
+                print(
+                    "SECTION RECEIVED:",
+                    q.get("section")
+                )
+
+                print(
+                    "QUESTION:",
+                    q.get("question", "")[:50]
+                )
 
                 options = q.get(
                     "options",

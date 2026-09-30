@@ -70,6 +70,20 @@ def save(data: dict):
         []
     )
 
+    print("\n========== SAVE DEBUG ==========")
+    print("TOTAL QUESTIONS:", len(questions))
+
+    if questions:
+        print("FIRST QUESTION:")
+        print(questions[0])
+
+        print(
+            "FIRST QUESTION SECTION:",
+            questions[0].get("section")
+        )
+
+    print("================================\n")
+
     return service.create_exam(
         questions
     )
@@ -101,6 +115,7 @@ def get_exam(
         "name": exam.name,
         "total_questions": exam.total_questions
     }
+
 
 
 @app.get("/exam/{exam_id}/questions")
