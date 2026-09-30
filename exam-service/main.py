@@ -181,15 +181,80 @@ def submit_result(data: dict):
     skipped = data["skipped"]
     review = data["review"]
 
+    correct = data.get("correct", 0)
+    incorrect = data.get("incorrect", 0)
+    unseen = data.get("unseen", 0)
+
+    accuracy = data.get(
+        "accuracy",
+        "0.00"
+    )
+
+    completion_percentage = data.get(
+        "completion_percentage",
+        "0.00"
+    )
+
+    correct_percentage = data.get(
+        "correct_percentage",
+        "0.00"
+    )
+
+    total_time = data.get(
+        "total_time",
+        0
+    )
+
+    utilized_time = data.get(
+        "utilized_time",
+        0
+    )
+
+    section_stats = data.get(
+        "section_stats",
+        {}
+    )
+
+    questions = data.get(
+        "questions",
+        []
+    )
+
+    answers = data.get(
+        "answers",
+        {}
+    )
+
     pdf_path = generate_result_pdf(
         user_name=user_name,
         email=email,
-        exam_name="PDF2Exam",
+
         score=score,
         total_questions=total_questions,
+
         attempted=attempted,
+        correct=correct,
+        incorrect=incorrect,
+
         skipped=skipped,
         review=review,
+        unseen=unseen,
+
+        accuracy=accuracy,
+
+        completion_percentage=completion_percentage,
+
+        correct_percentage=correct_percentage,
+
+        total_time=total_time,
+
+        utilized_time=utilized_time,
+
+        section_stats=section_stats,
+
+        questions=questions,
+
+        answers=answers,
     )
 
     email_sent = send_result_email(
@@ -197,7 +262,7 @@ def submit_result(data: dict):
         "PDF2Exam",
         score,
         total_questions,
-        pdf_path
+        pdf_path,
     )
 
     return {

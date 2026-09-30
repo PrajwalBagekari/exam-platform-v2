@@ -159,22 +159,35 @@ const correctPercentage =
             "application/json",
         },
         body: JSON.stringify({
-          user_name:
-            candidateName,
-
-          email:
-            candidateEmail,
+          user_name: candidateName,
+          email: candidateEmail,
 
           score,
-
-          total_questions:
-            totalQuestions,
+          total_questions: totalQuestions,
 
           attempted,
-
+          correct,
+          incorrect,
           skipped,
+          review,
+          unseen,
 
-          review: 0,
+          accuracy,
+          completion_percentage:
+            completionPercentage,
+
+          correct_percentage:
+            correctPercentage,
+
+          total_time: totalTime,
+          utilized_time:
+            utilizedTime,
+
+          section_stats:
+            sectionStats,
+
+          questions,
+          answers,
         }),
       }
     )
