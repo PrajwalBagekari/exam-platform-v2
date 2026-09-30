@@ -5,3 +5,4 @@ psycopg2-binary
 psycopg[binary]
 sib-api-v3-sdk
 reportlab
+playwright
