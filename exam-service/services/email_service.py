@@ -1,16 +1,17 @@
 import os
+import base64
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 
+
 def send_result_email(
-    email: str,
-    exam_name: str,
-    score: int,
-    total_questions: int,
+    email,
+    exam_name,
+    score,
+    total_questions,
+    pdf_path,
 ):
-    configuration = (
-        sib_api_v3_sdk.Configuration()
-    )
+    configuration = sib_api_v3_sdk.Configuration()
 
     configuration.api_key[
         "api-key"
@@ -25,6 +26,13 @@ def send_result_email(
             )
         )
     )
+
+    with open(pdf_path, "rb") as f:
+        pdf_content = (
+            base64.b64encode(
+                f.read()
+            ).decode("utf-8")
+        )
 
     email_data = (
         sib_api_v3_sdk.SendSmtpEmail(
@@ -42,19 +50,23 @@ def send_result_email(
             <h2>Exam Result</h2>
 
             <p>
-            Exam:
-            {exam_name}
+            Exam: {exam_name}
             </p>
 
             <p>
-            Score:
-            {score}/{total_questions}
+            Score: {score}/{total_questions}
             </p>
 
             <p>
             Thank you for using PDF2Exam.
             </p>
-            """
+            """,
+            attachment=[
+                {
+                    "content": pdf_content,
+                    "name": "Exam_Result.pdf"
+                }
+            ]
         )
     )
 
@@ -68,9 +80,12 @@ def send_result_email(
             "Result email sent"
         )
 
+        return True
+
     except ApiException as e:
 
         print(
             f"Brevo Error: {e}"
         )
+
         return False
