@@ -1,8 +1,10 @@
 from unittest import result
-
+from pdf_service import (
+    generate_result_pdf
+)
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from exam_service import ExamService
 from services.email_service import (
     send_result_email
 )
@@ -164,9 +166,18 @@ def submit_result(data: dict):
     skipped = data["skipped"]
     review = data["review"]
 
-    # generate_result_pdf(...)
-    # send_result_email(...)
+    pdf_path = generate_result_pdf(
+        user_name=user_name,
+        email=email,
+        exam_name="PDF2Exam",
+        score=score,
+        total_questions=total_questions,
+        attempted=attempted,
+        skipped=skipped,
+        review=review,
+    )
 
     return {
-        "message": "Result email sent"
+        "message": "PDF generated",
+        "pdf_path": pdf_path,
     }

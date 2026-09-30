@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-
+import { useEffect } from "react";
 
 export default function Result() {
   const location = useLocation();
@@ -92,6 +92,72 @@ export default function Result() {
     localStorage.getItem(
       "candidateEmail"
     );
+  console.log(
+    "candidateName:",
+    candidateName
+  );
+
+  console.log(
+    "candidateEmail:",
+    candidateEmail
+  );
+  useEffect(() => {
+
+    if (
+      !candidateName ||
+      !candidateEmail
+    ) {
+      return;
+    }
+
+    fetch(
+      "https://pdf2exam.org/submit-result",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+        body: JSON.stringify({
+          user_name:
+            candidateName,
+
+          email:
+            candidateEmail,
+
+          score,
+
+          total_questions:
+            totalQuestions,
+
+          attempted,
+
+          skipped,
+
+          review: 0,
+        }),
+      }
+    )
+      .then((res) =>
+        res.json()
+      )
+      .then((data) => {
+
+        console.log(
+          "PDF Generated",
+          data
+        );
+
+      })
+      .catch((err) => {
+
+        console.error(
+          err
+        );
+
+      });
+
+  }, []);
   
   const renderCard = (
     title: string,
