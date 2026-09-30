@@ -83,6 +83,10 @@ export default function ExamSummary() {
       "candidateEmail",
       email
     );
+    localStorage.setItem(
+        "sectionTimers",
+        JSON.stringify(sections)
+      );
 
     navigate(`/attempt/${id}`);
   };

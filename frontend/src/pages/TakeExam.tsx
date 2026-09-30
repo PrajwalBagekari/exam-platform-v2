@@ -56,7 +56,7 @@ export default function TakeExam() {
 };
 
   const [timeLeft, setTimeLeft] =
-    useState(60 * 60);
+    useState(0);
 
   const [questionStatus, setQuestionStatus] =
     useState<Record<number, string>>({});
@@ -207,20 +207,48 @@ export default function TakeExam() {
             );
 
           setSections(sectionList);
-                console.log(
-          "FIRST QUESTION:",
-          sortedQuestions[0]?.question
-        );
+          const savedTimers =
+            JSON.parse(
+              localStorage.getItem(
+                "sectionTimers"
+              ) || "[]"
+            );
 
-        console.log(
-          "SECOND QUESTION:",
-          sortedQuestions[1]?.question
-        );
+          const totalMinutes =
+            savedTimers.reduce(
+              (
+                sum: number,
+                s: any
+              ) =>
+                sum +
+                (
+                  s.timer_minutes ??
+                  s.count
+                ),
+              0
+            );
 
-        console.log(
-          "THIRD QUESTION:",
-          sortedQuestions[2]?.question
-        );
+          setTimeLeft(
+            totalMinutes * 60
+          );
+          console.log(
+            "TOTAL MINUTES:",
+            totalMinutes
+          );
+          console.log(
+              "FIRST QUESTION:",
+              sortedQuestions[0]?.question
+            );
+
+          console.log(
+            "SECOND QUESTION:",
+            sortedQuestions[1]?.question
+          );
+
+          console.log(
+            "THIRD QUESTION:",
+            sortedQuestions[2]?.question
+          );
 
       } catch (error) {
 
