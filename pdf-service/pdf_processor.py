@@ -306,7 +306,7 @@ class PDFProcessor:
                 ""
             )
 
-        print("\nTEXT SAMPLE:")
+        print("\nTEXT SAMPLES:")
         print(
             cleaned_text[:5000]
         )
