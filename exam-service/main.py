@@ -287,11 +287,19 @@ def submit_result(data: dict):
         "pdf_path": pdf_path,
         "email_sent": email_sent,
     }
+
 @app.get("/result-page-pdf")
 def result_page_pdf():
 
+    pdf_path = "results/result_page.pdf"
+
+    generate_html_pdf(
+        "https://pdf2exam.org/result",
+        pdf_path,
+    )
+
     return FileResponse(
-        "results/result_page.pdf",
+        pdf_path,
         media_type="application/pdf",
         filename="result_page.pdf"
     )
