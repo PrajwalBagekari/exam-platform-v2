@@ -8,6 +8,7 @@ from exam_service import ExamService
 from services.email_service import (
     send_result_email
 )
+from fastapi.responses import FileResponse
 from database import (
     engine,
     SessionLocal
@@ -286,3 +287,11 @@ def submit_result(data: dict):
         "pdf_path": pdf_path,
         "email_sent": email_sent,
     }
+@app.get("/result-page-pdf")
+def result_page_pdf():
+
+    return FileResponse(
+        "results/result_page.pdf",
+        media_type="application/pdf",
+        filename="result_page.pdf"
+    )
